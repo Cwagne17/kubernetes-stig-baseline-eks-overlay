@@ -35,4 +35,6 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag 'documentable'
   tag cci: ['CCI-001084']
   tag nist: ['SC-3']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

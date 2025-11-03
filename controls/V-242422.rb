@@ -22,4 +22,6 @@ If the setting tls-cert-file and private-key-file is not set in the Kubernetes A
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

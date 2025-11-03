@@ -37,4 +37,6 @@ If a return value is returned from the "kubectl get all" command and it is not t
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

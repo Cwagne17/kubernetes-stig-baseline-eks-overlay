@@ -17,4 +17,6 @@ If the setting "profiling" is not configured in the Kubernetes Controller Manage
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

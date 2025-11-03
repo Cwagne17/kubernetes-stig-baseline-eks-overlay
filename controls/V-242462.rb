@@ -19,4 +19,6 @@ Set the value of "--audit-log-maxsize" to a minimum of "100".'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

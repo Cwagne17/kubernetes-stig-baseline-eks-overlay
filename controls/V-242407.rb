@@ -35,4 +35,6 @@ The kubelet file should now have the permissions of "644".'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

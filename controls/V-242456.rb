@@ -20,4 +20,6 @@ chmod 644 /var/lib/kubelet/config.yaml'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

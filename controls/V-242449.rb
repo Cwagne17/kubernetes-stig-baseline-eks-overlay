@@ -42,4 +42,6 @@ chmod 644 <path_to_client_ca_file>'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

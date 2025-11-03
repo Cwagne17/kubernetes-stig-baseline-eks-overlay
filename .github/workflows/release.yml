@@ -1,0 +1,53 @@
+name: release
+on:
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: "Next version (must match 2.4.x)"
+        required: true
+        type: string
+permissions:
+  contents: write
+  actions: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate version input
+        run: |
+          if ! echo "${{ inputs.new_version }}" | grep -Eq '^2\.4\.[0-9]+$'; then
+            echo "Version must match ^2\\.4\\.[0-9]+$ (STIG V2R4 policy)."
+            exit 1
+          fi
+
+      - name: Bump inspec.yml version
+        run: |
+          sed -i.bak -E "s/^version: .*/version: ${{ inputs.new_version }}/" inspec.yml
+          rm -f inspec.yml.bak
+          git diff -- inspec.yml
+
+      - name: Generate CHANGELOG entry
+        run: |
+          echo "## [${{ inputs.new_version }}] - $(date -u +%Y-%m-%d)" >> CHANGELOG.md
+          echo "- Patch update aligned to STIG V2R4." >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+      - name: Commit and tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add inspec.yml CHANGELOG.md
+          git commit -m "chore(release): ${{ inputs.new_version }}"
+          git tag "v${{ inputs.new_version }}"
+
+      - name: Push
+        run: |
+          git push --follow-tags
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.new_version }}
+          generate_release_notes: true

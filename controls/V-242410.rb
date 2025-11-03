@@ -42,4 +42,6 @@ Update Kubernetes API Server manifest and namespace PPS configuration to comply 
   tag 'documentable'
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

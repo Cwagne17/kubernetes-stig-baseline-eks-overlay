@@ -1,0 +1,41 @@
+name: validate
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+      - name: Install cinc-auditor
+        run: |
+          curl -L https://omnitruck.cinc.sh/install.sh | sudo bash -s -- -P cinc-auditor
+          cinc-auditor -v
+      - name: Lint Ruby (rubocop if present)
+        run: |
+          if [ -f .rubocop.yml ] || [ -f .rubocop_todo.yml ]; then
+            gem install rubocop -N
+            rubocop || true
+          else
+            echo "No rubocop config; skipping."
+          fi
+      - name: Dependency audit (bundler-audit if Gemfile.lock)
+        run: |
+          if [ -f Gemfile.lock ]; then
+            gem install bundler-audit -N
+            bundler-audit update || true
+            bundler-audit check || true
+          else
+            echo "No Gemfile.lock; skipping."
+          fi
+      - name: InSpec profile check
+        run: |
+          cinc-auditor check .

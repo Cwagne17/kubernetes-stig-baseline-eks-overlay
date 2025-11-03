@@ -30,4 +30,6 @@ The kubelet file should now be owned by root:root.'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end
