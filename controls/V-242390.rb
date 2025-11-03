@@ -24,6 +24,11 @@ Set the value of  "--anonymous-auth" to "false".'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane API server must have anonymous authentication disabled.' do
+  it 'is not a finding in Amazon EKS because On Amazon EKS, the kube-apiserver is part of the AWS-managed control plane and customers cannot set flags like --anonymous-auth. EKS requires clients to authenticate (via IAM-based EKS authentication such as access entries/aws-auth) before the API server authorizes requests, satisfying the requirement to disable anonymous access; see https://docs.aws.amazon.com/eks/latest/userguide/cluster-auth.html' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

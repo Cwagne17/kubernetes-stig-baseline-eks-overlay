@@ -25,6 +25,11 @@ Set the value of "--key-file" to the Approved Organizational Certificate.'
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane etcd must have a key file for secure communication.' do
+  it 'is not a finding in Amazon EKS because The etcd server key file configuration is managed by AWS in EKS control plane nodes; customers cannot set or read it. Not a Finding – AWS responsibility; see https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

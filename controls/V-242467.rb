@@ -20,6 +20,11 @@ find /etc/kubernetes/pki -name "*.key" | xargs chmod 600'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'PKI keys must have file permissions set to 600 or more restrictive.' do
+  it 'is not a finding in Amazon EKS because Control plane PKI keys (/etc/kubernetes/pki/*.key). EKS-managed; not customer-configurable; see https://stigviewer.com/stigs/kubernetes/2024-06-10/finding/V-242467' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

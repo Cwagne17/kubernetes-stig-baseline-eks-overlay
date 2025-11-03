@@ -23,6 +23,11 @@ Set the value of "--peer-client-cert-auth" to "true" for the etcd.'
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane etcd must enable client authentication to secure service.' do
+  it 'is not a finding in Amazon EKS because EKS manages etcd and its peer auth configuration; customers can’t alter --peer-client-cert-auth. Mark as Not a Finding – AWS responsibility; see https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

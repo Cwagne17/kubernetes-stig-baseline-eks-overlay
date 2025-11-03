@@ -17,6 +17,11 @@ If "basic-auth-file" is set in the Kubernetes API server manifest file this is a
   tag 'documentable'
   tag cci: ['CCI-002448']
   tag nist: ['SC-12 (3)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane API server must disable basic authentication to protect information in transit.' do
+  it 'is not a finding in Amazon EKS because Finding details / justification: Control plane flag (--basic-auth-file) is deprecated upstream and not exposed in EKS. EKS authenticates via IAM (webhook), service account tokens, and OIDC; customers cannot enable static basic auth on EKS; see https://docs.aws.amazon.com/eks/latest/best-practices/identity-and-access-management.html' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

@@ -25,6 +25,11 @@ Note: It is best to implement policies first and then enable the webhook, otherw
   tag 'documentable'
   tag cci: ['CCI-002263']
   tag nist: ['AC-16 a']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane API server must have the ValidatingAdmissionWebhook enabled.' do
+  it 'is not a finding in Amazon EKS because Control plane flag; in Amazon EKS this admission controller is enabled by default and API server flags aren’t customer-tunable. Not a finding for customers to remediate; cite AWS’s statement that EKS enables Validating/MutatingAdmissionWebhook by default on supported versions; see https://repost.aws/knowledge-center/eks-enable-webhook-admission-controller' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

@@ -23,6 +23,11 @@ Set the value of "--etcd-certfile" to the certificate to be used for communicati
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane etcd must have a certificate for communication.' do
+  it 'is not a finding in Amazon EKS because API server ↔ etcd TLS settings (including --etcd-certfile) are managed by AWS in EKS; customers can’t view or change the manifest flags.' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

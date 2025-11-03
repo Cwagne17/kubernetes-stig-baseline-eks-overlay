@@ -24,6 +24,11 @@ If the setting "--kubelet-client-key" is not configured in the Kubernetes API se
   tag 'documentable'
   tag cci: ['CCI-002448']
   tag nist: ['SC-12 (3)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'endpoints must use approved organizational certificate and key pair to protect information in transit.' do
+  it 'is not a finding in Amazon EKS because These API server flags are control-plane settings; EKS manages the mTLS between API server and kubelets and doesn’t expose these flags. Mark as provider-managed; not customer-configurable; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.htm' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

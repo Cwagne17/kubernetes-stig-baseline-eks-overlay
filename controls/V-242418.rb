@@ -20,6 +20,11 @@ Set the value of "--tls-cipher-suites" to:
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane API server must use approved cipher suites.' do
+  it 'is not a finding in Amazon EKS because Amazon EKS runs the kube-apiserver on an AWS-managed control plane; customers cannot set --tls-cipher-suites. EKS API endpoints are AWS service endpoints that require TLS 1.2 (TLS 1.3 recommended) and are managed by AWS; cipher selection is enforced by AWS for the service, not configurable by customers; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end
