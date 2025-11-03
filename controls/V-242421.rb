@@ -23,6 +23,11 @@ Set the value of "--root-ca-file" to path containing Approved Organizational Cer
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane controller manager must have the SSL Certificate Authority set.' do
+  it 'is not a finding in Amazon EKS because In Amazon EKS, the kube-controller-manager runs on the AWS-managed control plane; customers can’t set --root-ca-file. The control is inherited from AWS’s operation of the control plane; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

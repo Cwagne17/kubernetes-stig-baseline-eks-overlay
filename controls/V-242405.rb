@@ -25,6 +25,11 @@ All the manifest files should be owned by root:root.'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'manifests must be owned by root.' do
+  it 'is not a finding in Amazon EKS because On Amazon EKS, control-plane manifests under /etc/kubernetes/manifests are not customer-accessible; AWS manages file ownership/permissions on those hosts. This control is inherited from AWS and out of customer scope; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

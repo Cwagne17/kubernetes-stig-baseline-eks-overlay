@@ -23,6 +23,11 @@ Set the value of "--peer-cert-file" to the certificate to be used for communicat
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane etcd must have peer-cert-file set for secure communication.' do
+  it 'is not a finding in Amazon EKS because etcd peer key config is part of the managed control plane and not exposed in EKS. Not a Finding – AWS responsibility; see https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

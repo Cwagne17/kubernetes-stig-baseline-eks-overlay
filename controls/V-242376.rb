@@ -20,6 +20,11 @@ If the setting "tls-min-version" is not configured in the Kubernetes Controller 
   tag 'documentable'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane controller manager must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.' do
+  it 'is not a finding in Amazon EKS because Amazon EKS manages the control plane (incl. controller manager); see https://docs.aws.amazon.com/general/latest/gr/rande.html#FIPS-endpoints' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

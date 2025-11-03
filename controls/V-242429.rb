@@ -23,6 +23,11 @@ Set the value of "--etcd-cafile" to the Certificate Authority for etcd.'
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'Control-plane etcd must have the SSL Certificate Authority set.' do
+  it 'is not a finding in Amazon EKS because In Amazon EKS, the etcd cluster is part of the AWS-managed control plane; customers can’t set --etcd-cafile. The control is inherited from AWS’s operation of the control plane; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

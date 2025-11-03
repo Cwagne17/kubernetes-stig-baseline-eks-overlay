@@ -24,6 +24,11 @@ chown root:root /etc/kubernetes/controller-manager.conf'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'conf files must be owned by root.' do
+  it 'is not a finding in Amazon EKS because These files live on control plane hosts (/etc/kubernetes/{controller-manager.conf,scheduler.conf}) which are not accessible in EKS. EKS manages ownership/permissions; customers can’t modify or inspect; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end

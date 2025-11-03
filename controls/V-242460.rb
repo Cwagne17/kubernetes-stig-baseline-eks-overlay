@@ -24,6 +24,11 @@ chmod 644 /etc/kubernetes/controller-manager.conf'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+# --- BEGIN CUSTOM CODE ---
+describe 'admin kubeconfig must have file permissions set to 644 or more restrictive.' do
+  it 'is not a finding in Amazon EKS because These files are on control plane hosts. EKS manages them; customers can’t change or inspect permissions; see https://stigviewer.com/stigs/kubernetes/2024-06-10/finding/V-242460' do
+    expect(true).to eq true
+  end
+end
+# --- END CUSTOM CODE ---
 end
