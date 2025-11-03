@@ -30,6 +30,24 @@ The kubelet file should now be owned by root:root.'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubelet_config_path = input('kubelet_config_path')
+
+  describe 'Kubelet configuration file' do
+    subject { file(kubelet_config_path) }
+
+    it 'must exist' do
+      expect(subject).to exist
+    end
+
+    it 'must be owned by root' do
+      expect(subject.owner).to eq('root')
+    end
+
+    it 'must have root as group owner' do
+      expect(subject.group).to eq('root')
+    end
+  end
+  # --- End Custom Code ---
 end

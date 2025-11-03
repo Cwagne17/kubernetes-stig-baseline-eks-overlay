@@ -45,3 +45,29 @@ serve: ## Start Heimdall Lite to view results (requires Docker)
 stop: ## Stop Heimdall Lite
 	@echo "Stopping Heimdall Lite..."
 	docker compose down
+
+docker-build: ## Build the Docker image
+	@echo "Building Docker image..."
+	docker build -t kubernetes-stig-baseline-eks:latest .
+	@echo "✅ Image built: kubernetes-stig-baseline-eks:latest"
+
+docker-run: ## Run the Docker image (use TARGET=<target> for custom target)
+	@echo "Running InSpec profile in Docker..."
+	@mkdir -p output
+	docker run --rm \
+		$(if $(TARGET),-e TARGET=$(TARGET)) \
+		-v $(PWD)/output:/opt/output \
+		kubernetes-stig-baseline-eks:latest
+	@echo "✅ Results saved to output/results.json"
+
+docker-run-ssm: ## Run with AWS SSM (use TARGET=awsssm://instance-id)
+	@echo "Running InSpec profile with AWS SSM..."
+	@mkdir -p output
+	docker run --rm \
+		-e TARGET=$(TARGET) \
+		-e AWS_REGION=$(or $(AWS_REGION),us-east-1) \
+		-e AWS_PROFILE=$(AWS_PROFILE) \
+		-v $(HOME)/.aws:/root/.aws:ro \
+		-v $(PWD)/output:/opt/output \
+		kubernetes-stig-baseline-eks:latest
+	@echo "✅ Results saved to output/results.json"

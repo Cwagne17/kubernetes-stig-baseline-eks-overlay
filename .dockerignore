@@ -1,0 +1,43 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+
+# Output and artifacts
+output/
+*.json
+*.html
+*.xml
+
+# Terraform/OpenTofu
+examples/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.lock.hcl
+
+# Ruby
+.bundle/
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Docker
+compose.yaml
+Dockerfile
+.dockerignore
+
+# CI/CD
+.github/
+
+# Misc
+.DS_Store
+Thumbs.db

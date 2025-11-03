@@ -27,3 +27,8 @@ inspec_version: "~> 6.0"
 ###
 
 inputs:
+  - name: kubelet_config_path
+    description: Path to the kubelet configuration file
+    type: String
+    value: /etc/kubernetes/kubelet/config.json
+    required: false
