@@ -17,4 +17,6 @@ If "basic-auth-file" is set in the Kubernetes API server manifest file this is a
   tag 'documentable'
   tag cci: ['CCI-002448']
   tag nist: ['SC-12 (3)']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

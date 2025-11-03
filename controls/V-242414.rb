@@ -27,4 +27,6 @@ If any host-privileged ports are returned for any of the pods, this is a finding
   tag 'documentable'
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

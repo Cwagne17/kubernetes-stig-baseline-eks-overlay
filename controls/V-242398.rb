@@ -47,4 +47,6 @@ service kubelet restart)
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

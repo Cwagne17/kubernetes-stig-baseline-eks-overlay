@@ -20,4 +20,6 @@ If the setting "tls-min-version" is not configured in the Kubernetes Scheduler m
   tag 'documentable'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

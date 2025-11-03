@@ -53,4 +53,6 @@ The encryption config must specify the Secret's resource and provider. Below is 
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

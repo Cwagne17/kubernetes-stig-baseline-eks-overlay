@@ -24,4 +24,6 @@ If the setting "--kubelet-client-key" is not configured in the Kubernetes API se
   tag 'documentable'
   tag cci: ['CCI-002448']
   tag nist: ['SC-12 (3)']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

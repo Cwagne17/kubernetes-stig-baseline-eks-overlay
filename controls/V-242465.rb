@@ -17,4 +17,6 @@ If the setting audit-log-path is not set in the Kubernetes API Server manifest f
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end

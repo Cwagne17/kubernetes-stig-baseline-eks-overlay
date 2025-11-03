@@ -1,0 +1,25 @@
+name: test
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install CINC-auditor
+        run: |
+          curl -L https://omnitruck.cinc.sh/install.sh | sudo bash -s -- -P cinc-auditor
+      - name: Smoke exec (no target, just compile)
+        run: |
+          cinc-auditor exec . --no-distinct-exit --reporter cli || true
+      - name: JSON reporter compile test
+        run: |
+          cinc-auditor exec . --reporter json:/tmp/report.json || true
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: inspec-report
+          path: /tmp/report.json

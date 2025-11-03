@@ -88,4 +88,6 @@ kubectl create -f restricted.yml"
   tag 'documentable'
   tag cci: ['CCI-002263']
   tag nist: ['AC-16 a']
+# --- Begin Custom Code ---
+# --- End Custom Code ---
 end
