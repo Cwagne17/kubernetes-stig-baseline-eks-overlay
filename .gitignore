@@ -70,6 +70,6 @@ build-iPhoneSimulator/
 # delta files
 delta.json
 report.md
-*xccdf.xml
+# *xccdf.xml
 check-results.txt
 kitchen.local.ec2.yml
