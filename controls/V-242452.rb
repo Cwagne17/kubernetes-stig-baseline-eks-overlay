@@ -20,6 +20,21 @@ chmod 644 /etc/kubernetes/kubelet.conf'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubelet_kubeconfig_path = input('kubelet_kubeconfig_path')
+
+  describe 'Kubelet kubeconfig file permissions' do
+    subject { file(kubelet_kubeconfig_path) }
+
+    it 'must exist' do
+      expect(subject).to exist
+    end
+
+    it 'must have permissions 0644 or more restrictive' do
+      expect(subject).not_to be_more_permissive_than('0644')
+    end
+  end
+
+  # --- End Custom Code ---
 end

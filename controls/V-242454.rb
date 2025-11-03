@@ -25,6 +25,20 @@ chown root:root <kubeadm.conf path>'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubeadm_conf_path = input('kubeadm_conf_path')
+
+  # Only check if the file exists (kubeadm may not be used)
+  only_if('kubeadm.conf must exist') do
+    file(kubeadm_conf_path).exist?
+  end
+
+  describe file(kubeadm_conf_path) do
+    it { should exist }
+    its('owner') { should cmp 'root' }
+    its('group') { should cmp 'root' }
+  end
+
+  # --- End Custom Code ---
 end

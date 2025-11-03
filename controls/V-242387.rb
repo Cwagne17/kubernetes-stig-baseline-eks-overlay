@@ -35,6 +35,23 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubelet_config_path = input('kubelet_config_path')
+
+  # Check kubelet process for --read-only-port flag
+  describe processes('kubelet').commands.to_s do
+    it 'must not have --read-only-port flag' do
+      expect(subject).not_to match(/--read-only-port/)
+    end
+  end
+
+  # Check kubelet config file for readOnlyPort setting
+  if file(kubelet_config_path).exist?
+    describe json(kubelet_config_path) do
+      its(['readOnlyPort']) { should be_nil.or eq(0) }
+    end
+  end
+
+  # --- End Custom Code ---
 end

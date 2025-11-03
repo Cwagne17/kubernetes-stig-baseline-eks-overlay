@@ -1,7 +1,7 @@
 FROM redhat/ubi9:latest
 
 # Set metadata
-LABEL maintainer="Christopher Wagner <github.com/Cwagne17" \
+LABEL maintainer="Christopher Wagner <github.com/Cwagne17>" \
       description="CINC Auditor with Kubernetes STIG Baseline EKS Overlay"
 
 # Install required packages

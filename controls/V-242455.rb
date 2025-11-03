@@ -25,6 +25,19 @@ chmod 644 <kubeadm.conf path>'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubeadm_conf_path = input('kubeadm_conf_path')
+
+  # Only check if the file exists (kubeadm may not be used)
+  only_if('kubeadm.conf must exist') do
+    file(kubeadm_conf_path).exist?
+  end
+
+  describe file(kubeadm_conf_path) do
+    it { should exist }
+    it { should_not be_more_permissive_than('0644') }
+  end
+
+  # --- End Custom Code ---
 end

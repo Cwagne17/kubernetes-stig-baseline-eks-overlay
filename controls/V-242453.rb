@@ -20,6 +20,25 @@ chown root:root /etc/kubernetes/kubelet.conf'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubelet_kubeconfig_path = input('kubelet_kubeconfig_path')
+
+  describe 'Kubelet kubeconfig file ownership' do
+    subject { file(kubelet_kubeconfig_path) }
+
+    it 'must exist' do
+      expect(subject).to exist
+    end
+
+    it 'must be owned by root' do
+      expect(subject.owner).to eq('root')
+    end
+
+    it 'must have root as group owner' do
+      expect(subject.group).to eq('root')
+    end
+  end
+
+  # --- End Custom Code ---
 end

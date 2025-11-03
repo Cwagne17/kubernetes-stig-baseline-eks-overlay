@@ -65,6 +65,23 @@ d. Restart the kubelet service using the following command:
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubelet_config_path = input('kubelet_config_path')
+
+  # Check kubelet process for --pod-manifest-path flag
+  describe processes('kubelet').commands.to_s do
+    it 'must not have --pod-manifest-path flag' do
+      expect(subject).not_to match(/--pod-manifest-path/)
+    end
+  end
+
+  # Check kubelet config file for staticPodPath setting
+  if file(kubelet_config_path).exist?
+    describe json(kubelet_config_path) do
+      its(['staticPodPath']) { should be_nil }
+    end
+  end
+
+  # --- End Custom Code ---
 end

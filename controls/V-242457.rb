@@ -20,6 +20,15 @@ chown root:root /var/lib/kubelet/config.yaml'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubelet_config_path = input('kubelet_config_path')
+
+  describe file(kubelet_config_path) do
+    it { should exist }
+    its('owner') { should cmp 'root' }
+    its('group') { should cmp 'root' }
+  end
+
+  # --- End Custom Code ---
 end

@@ -32,3 +32,33 @@ inputs:
     type: String
     value: /etc/kubernetes/kubelet/config.json
     required: false
+
+  - name: kubelet_kubeconfig_path
+    description: Path to the kubelet kubeconfig file
+    type: String
+    value: /var/lib/kubelet/kubeconfig
+    required: false
+
+  - name: kube_proxy_kubeconfig_path
+    description: Path to the kube-proxy kubeconfig file
+    type: String
+    value: /var/lib/kube-proxy-config/config
+    required: false
+
+  - name: kubelet_ca_file_path
+    description: Path to the kubelet client CA file
+    type: String
+    value: /etc/kubernetes/pki/ca.crt
+    required: false
+
+  - name: kubernetes_pki_path
+    description: Path to the Kubernetes PKI directory
+    type: String
+    value: /etc/kubernetes/pki
+    required: false
+
+  - name: kubeadm_conf_path
+    description: Path to the kubeadm configuration file
+    type: String
+    value: /etc/kubernetes/kubeadm.conf
+    required: false

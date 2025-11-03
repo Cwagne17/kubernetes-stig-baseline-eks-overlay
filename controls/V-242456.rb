@@ -20,6 +20,14 @@ chmod 644 /var/lib/kubelet/config.yaml'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubelet_config_path = input('kubelet_config_path')
+
+  describe file(kubelet_config_path) do
+    it { should exist }
+    it { should_not be_more_permissive_than('0644') }
+  end
+
+  # --- End Custom Code ---
 end

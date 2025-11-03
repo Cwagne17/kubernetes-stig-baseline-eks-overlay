@@ -35,6 +35,21 @@ The kubelet file should now have the permissions of "644".'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  kubelet_config_path = input('kubelet_config_path')
+
+  describe 'Kubelet configuration file permissions' do
+    subject { file(kubelet_config_path) }
+
+    it 'must exist' do
+      expect(subject).to exist
+    end
+
+    it 'must have permissions 0644 or more restrictive' do
+      expect(subject).not_to be_more_permissive_than('0644')
+    end
+  end
+
+  # --- End Custom Code ---
 end

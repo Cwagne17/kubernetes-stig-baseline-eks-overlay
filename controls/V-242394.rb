@@ -24,6 +24,13 @@ Note: If access to the worker node is through an SSH session, it is important to
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- Begin Custom Code ---
+
+  describe service('sshd') do
+    it 'must not be enabled' do
+      expect(subject).not_to be_enabled
+    end
+  end
+
+  # --- End Custom Code ---
 end

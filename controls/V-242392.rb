@@ -24,6 +24,25 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- BEGIN CUSTOM CODE ---
-# --- END CUSTOM CODE ---
+  # --- Begin Custom Code ---
+
+  kubelet_config_path = input('kubelet_config_path')
+
+  # Check kubelet process for --authorization-mode flag
+  describe processes('kubelet').commands.to_s do
+    it 'must have --authorization-mode set to Webhook if flag is present' do
+      if subject.match?(/--authorization-mode/)
+        expect(subject).to match(/--authorization-mode[= ]Webhook/)
+      end
+    end
+  end
+
+  # Check kubelet config file for authorization.mode setting
+  if file(kubelet_config_path).exist?
+    describe json(kubelet_config_path) do
+      its(['authorization', 'mode']) { should cmp 'Webhook' }
+    end
+  end
+
+  # --- End Custom Code ---
 end
