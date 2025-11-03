@@ -21,8 +21,12 @@ Set the value of "--use-service-account-credentials" to "true".'
   tag cci: ['CCI-000015']
   tag nist: ['AC-2 (1)']
   # --- BEGIN CUSTOM CODE ---
-  describe 'Control-plane controller manager must create unique service accounts for each work payload.' do
-    it 'is not a finding in Amazon EKS because On Amazon EKS, the Kubernetes controller manager is part of the AWS-managed control plane, and customers can’t configure its flags (including --use-service-account-credentials). As a result, this control is inherited and fulfilled by AWS’s operation of the control plane; no customer action is possible/required; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+  describe 'Control-plane controller manager must create unique service accounts for each work payload' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --use-service-account-credentials flag
+      is configured by the Kubernetes control plane managed by EKS.
+      See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+    JUSTIFICATION
       expect(true).to eq true
     end
   end

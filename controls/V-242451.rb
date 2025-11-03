@@ -20,11 +20,16 @@ chown -R root:root /etc/kubernetes/pki/'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- BEGIN CUSTOM CODE ---
-describe 'component PKI must be owned by root.' do
-  it 'is not a finding in Amazon EKS because STIG targets /etc/kubernetes/pki on control plane. In EKS, the control plane (and its PKI) runs in an AWS-managed VPC; customers can’t access or set ownership on these files; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'component PKI must be owned by root' do
+    it <<~JUSTIFICATION do
+      is not a finding because the /etc/kubernetes/pki directory and its contents
+      are configured by the Kubernetes control plane managed by EKS.
+      AWS is responsible for proper ownership and permissions on control plane PKI.
+      See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

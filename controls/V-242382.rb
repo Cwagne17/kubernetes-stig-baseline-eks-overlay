@@ -25,8 +25,13 @@ Set the value of "--authorization-mode" to "Node,RBAC".'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
-  describe 'Control-plane API server must enable Node,RBAC as the authorization mode.' do
-    it 'is not a finding. The kube-apiserver is part of the AWS-managed control plane, so customers can\'t set --authorization-mode. Regardless of which authentication mode you use (aws-auth ConfigMap, EKS access entries via the API, or both), that only maps IAM principals to Kubernetes identities; authorization on the control plane is still enforced by the Node and RBAC authorizers; see https://docs.aws.amazon.com/eks/latest/userguide/cluster-auth.html' do
+  describe 'Control-plane API server must enable Node,RBAC as the authorization mode' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --authorization-mode flag
+      is configured by the Kubernetes control plane managed by EKS.
+      Amazon EKS enforces Node and RBAC authorization regardless of the authentication method used.
+      See https://docs.aws.amazon.com/eks/latest/userguide/cluster-auth.html
+    JUSTIFICATION
       expect(true).to eq true
     end
   end

@@ -19,8 +19,13 @@ If the setting bind-address is not set to "127.0.0.1" or is not found in the Kub
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 # --- BEGIN CUSTOM CODE ---
-describe 'Control-plane controller manager must have secure binding.' do
-  it 'is not a finding in Amazon EKS because In Amazon EKS, the controller manager runs inside an AWS-managed VPC as part of the managed control plane. Customers can’t access or edit its manifest (so you can’t set --bind-address yourself), and the controller-manager’s health/metrics endpoint isn’t exposed for scraping—only the API server endpoint exposure is configurable; see https://docs.aws.amazon.com/eks/latest/userguide/eks-architecture.html' do
+describe 'Control-plane controller manager must have secure binding' do
+  it <<~JUSTIFICATION do
+    is not a finding because the --bind-address flag
+    is configured by the Kubernetes control plane managed by EKS.
+    The controller manager's health/metrics endpoint is not exposed for customer access.
+    See https://docs.aws.amazon.com/eks/latest/userguide/eks-architecture.html
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

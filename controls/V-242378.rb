@@ -22,7 +22,12 @@ If the setting "tls-min-version" is not configured in the Kubernetes API Server 
   tag nist: ['AC-17 (2)']
   # --- BEGIN CUSTOM CODE ---
   describe 'Control-plane API server must use TLS 1.2, at a minimum' do
-    it 'is not a finding. Amazon EKS manages the Kubernetes API server as part of the control plane and requires TLS 1.2 as a minimum when using FIPS endpoints; see https://docs.aws.amazon.com/general/latest/gr/rande.html#FIPS-endpoints' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --tls-min-version flag
+      is configured by the Kubernetes control plane managed by EKS.
+      AWS requires TLS 1.2 as a minimum when using FIPS endpoints and recommends TLS 1.3.
+      See https://docs.aws.amazon.com/general/latest/gr/rande.html#FIPS-endpoints
+    JUSTIFICATION
       expect(true).to eq true
     end
   end

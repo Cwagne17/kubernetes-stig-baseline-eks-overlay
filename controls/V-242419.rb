@@ -24,8 +24,12 @@ Set the value of "--client-ca-file" to path containing Approved Organizational C
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 # --- BEGIN CUSTOM CODE ---
-describe 'Control-plane API server must have the SSL Certificate Authority set.' do
-  it 'is not a finding in Amazon EKS because In Amazon EKS, the Kubernetes API server is part of the AWS-managed control plane, so customers can’t set flags like --client-ca-file. The control is inherited from AWS’s operation of the control plane; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+describe 'Control-plane API server must have the SSL Certificate Authority set' do
+  it <<~JUSTIFICATION do
+    is not a finding because the --client-ca-file flag
+    is configured by the Kubernetes control plane managed by EKS.
+    See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

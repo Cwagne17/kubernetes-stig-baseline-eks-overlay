@@ -22,8 +22,12 @@ Set the value of "--request-timeout" greater than "0".'
   tag cci: ['CCI-002415']
   tag nist: ['SC-7 (21)']
 # --- BEGIN CUSTOM CODE ---
-describe 'Control-plane API server must configure timeouts to limit attack surface.' do
-  it 'is not a finding in Amazon EKS because Control plane flag; EKS manages the API server and does not expose this flag. Customers can’t change /etc/kubernetes/manifests/kube-apiserver.yaml; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+describe 'Control-plane API server must configure timeouts to limit attack surface' do
+  it <<~JUSTIFICATION do
+    is not a finding because the --request-timeout flag
+    is configured by the Kubernetes control plane managed by EKS.
+    See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

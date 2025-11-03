@@ -24,8 +24,12 @@ Set the value of "--peer-key-file" to the certificate to be used for communicati
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 # --- BEGIN CUSTOM CODE ---
-describe 'Control-plane etcd must have a peer-key-file set for secure communication.' do
-  it 'is not a finding in Amazon EKS because etcd peer key config is part of the managed control plane and not exposed in EKS. Not a Finding – AWS responsibility; see https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane' do
+describe 'Control-plane etcd must have a peer-key-file set for secure communication' do
+  it <<~JUSTIFICATION do
+    is not a finding because the --peer-key-file flag
+    is configured by the Kubernetes control plane managed by EKS.
+    See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

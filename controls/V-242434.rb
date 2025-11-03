@@ -36,8 +36,12 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001084']
   tag nist: ['SC-3']
 # --- BEGIN CUSTOM CODE ---
-describe 'Kubelet must enable kernel protection.' do
-  it 'is not a finding in Amazon EKS because In Amazon EKS, the Kubernetes control plane (API server, controller-manager, scheduler, etcd) is AWS-managed; customers can’t access or set control-plane flags/manifests. This requirement is inherited from AWS and out of customer scope; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+describe 'Kubelet must enable kernel protection' do
+  it <<~JUSTIFICATION do
+    is not a finding because the --protect-kernel-defaults flag
+    is configured by the Kubernetes control plane managed by EKS.
+    See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

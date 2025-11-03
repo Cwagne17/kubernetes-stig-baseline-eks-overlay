@@ -23,8 +23,13 @@ If the setting tls-cert-file and private-key-file is not set in the Kubernetes A
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 # --- BEGIN CUSTOM CODE ---
-describe 'Control-plane API server must have a certificate for communication.' do
-  it 'is not a finding in Amazon EKS because The EKS Kubernetes API server is AWS-managed; customers cannot set --tls-cert-file/--tls-private-key-file. EKS presents a managed HTTPS endpoint backed by AWS-managed certificates, and the cluster’s CA is exposed via describe-cluster for clients, satisfying the requirement; see https://docs.aws.amazon.com/eks/latest/userguide/infrastructure-security.html' do
+describe 'Control-plane API server must have a certificate for communication' do
+  it <<~JUSTIFICATION do
+    is not a finding because the --tls-cert-file and --tls-private-key-file flags
+    are configured by the Kubernetes control plane managed by EKS.
+    EKS presents a managed HTTPS endpoint backed by AWS-managed certificates.
+    See https://docs.aws.amazon.com/eks/latest/userguide/infrastructure-security.html
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

@@ -22,11 +22,18 @@ Set the value of "--secure-port" to a value greater than "0".'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane API server must have the secure port set.' do
-  it 'is not a finding in Amazon EKS because In EKS, the control plane is fully managed and the Kubernetes API is exposed via an AWS-managed HTTPS endpoint (fronted by a load balancer) that enforces TLS (required 1.2; recommended 1.3) on port 443. Customers can’t set or unset --secure-port on the managed API server; the insecure port is not exposed; see https://docs.aws.amazon.com/eks/latest/userguide/infrastructure-security.html' do
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane API server must have the secure port set' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --secure-port flag
+      is configured by the Kubernetes control plane managed by EKS.
+      The Kubernetes API is exposed via an AWS-managed HTTPS endpoint on port 443
+      that enforces TLS 1.2 as a minimum (TLS 1.3 recommended when using FIPS endpoints);
+      the insecure port is not exposed.
+      See https://docs.aws.amazon.com/eks/latest/userguide/infrastructure-security.html
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

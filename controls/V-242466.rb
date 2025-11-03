@@ -21,8 +21,13 @@ find /etc/kubernetes/pki -name "*.crt" | xargs chmod 644'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 # --- BEGIN CUSTOM CODE ---
-describe 'PKI CRT must have file permissions set to 644 or more restrictive.' do
-  it 'is not a finding in Amazon EKS because Control plane PKI directory (/etc/kubernetes/pki). EKS-managed; not customer-configurable; see https://stigviewer.cyberprotection.com/stigs/kubernetes/2025-02-20/finding/V-242466' do
+describe 'PKI CRT must have file permissions set to 644 or more restrictive' do
+  it <<~JUSTIFICATION do
+    is not a finding because PKI certificate file permissions under /etc/kubernetes/pki
+    are configured by the Kubernetes control plane managed by EKS.
+    AWS is responsible for proper permissions on control plane PKI.
+    See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

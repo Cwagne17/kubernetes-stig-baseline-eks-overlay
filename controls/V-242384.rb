@@ -19,8 +19,14 @@ If the setting "bind-address" is not set to "127.0.0.1" or is not found in the K
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
-  describe 'Control-plane scheduler must have secure binding.' do
-    it 'is not a finding in Amazon EKS because In Amazon EKS, kube-scheduler runs on the AWS-managed control plane inside an AWS-managed VPC and isn’t customer-accessible. The scheduler’s legacy insecure HTTP port (10251) has been deprecated and removed in modern Kubernetes; health/metrics use the secure port (10259) instead; see https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html' do
+  describe 'Control-plane scheduler must have secure binding' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --bind-address flag
+      is configured by the Kubernetes control plane managed by EKS.
+      The scheduler's legacy insecure HTTP port (10251) has been deprecated and removed in modern Kubernetes versions;
+      health and metrics now use the secure port (10259).
+      See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+    JUSTIFICATION
       expect(true).to eq true
     end
   end

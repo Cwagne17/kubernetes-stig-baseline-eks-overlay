@@ -20,11 +20,16 @@ chown etcd:etcd /var/lib/etcd/*'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- BEGIN CUSTOM CODE ---
-describe 'component etcd must be owned by etcd.' do
-  it 'is not a finding in Amazon EKS because etcd data and config ownership on control-plane nodes is AWS-managed in EKS. Not a Finding – AWS responsibility; see https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane' do
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'component etcd must be owned by etcd' do
+    it <<~JUSTIFICATION do
+      is not a finding because etcd data and configuration file ownership
+      is configured by the Kubernetes control plane managed by EKS.
+      AWS is responsible for proper ownership and permissions on control plane components.
+      See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

@@ -18,6 +18,23 @@ inspec.lock
 .kitchen
 vendor/**
 saf-cli.log
+output/
+
+# Terraform / OpenTofu
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
 
 # Used by dotenv library to load environment variables.
 # .env

@@ -23,8 +23,13 @@ Remove the value of "--insecure-bind-address" setting.'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
 # --- BEGIN CUSTOM CODE ---
-describe 'Control-plane API server must have the insecure bind address not set.' do
-  it 'is not a finding in Amazon EKS because On Amazon EKS, the kube-apiserver runs on the AWS-managed control plane and customers cannot configure --insecure-bind-address or --insecure-bind-port. EKS exposes only the managed HTTPS API endpoint; there is no customer-accessible “insecure bind” interface, so the STIG requirement to avoid an insecure bind is inherited and satisfied by design; see https://docs.aws.amazon.com/eks/latest/userguide/infrastructure-security.html' do
+describe 'Control-plane API server must have the insecure bind address not set' do
+  it <<~JUSTIFICATION do
+    is not a finding because the --insecure-bind-address and --insecure-bind-port flags
+    are configured by the Kubernetes control plane managed by EKS.
+    EKS exposes only the managed HTTPS API endpoint; there is no insecure bind interface.
+    See https://docs.aws.amazon.com/eks/latest/userguide/infrastructure-security.html
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

@@ -24,8 +24,12 @@ Set the value of "--etcd-keyfile" to the certificate to be used for communicatio
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 # --- BEGIN CUSTOM CODE ---
-describe 'Control-plane etcd must have a key file for secure communication.' do
-  it 'is not a finding in Amazon EKS because API server ↔ etcd TLS settings (including --etcd-certfile) are managed by AWS in EKS; customers can’t view or change the manifest flags.' do
+describe 'Control-plane etcd must have a key file for secure communication' do
+  it <<~JUSTIFICATION do
+    is not a finding because the --etcd-keyfile flag
+    is configured by the Kubernetes control plane managed by EKS.
+    See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

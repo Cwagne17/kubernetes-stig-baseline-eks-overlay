@@ -1,0 +1,10 @@
+services:
+  heimdall-lite:
+    image: mitre/heimdall-lite:latest
+    platform: linux/amd64
+    container_name: heimdall-lite
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production

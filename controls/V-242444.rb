@@ -21,8 +21,13 @@ chown root:root /etc/kubernetes/manifests/*'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
 # --- BEGIN CUSTOM CODE ---
-describe 'Control-plane component manifests must be owned by root.' do
-  it 'is not a finding in Amazon EKS because Control-plane manifests live on AWS-managed hosts (not customer accessible); AWS ensures ownership and permissions. Not a Finding – AWS responsibility; see https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane' do
+describe 'Control-plane component manifests must be owned by root' do
+  it <<~JUSTIFICATION do
+    is not a finding because control-plane manifest files under /etc/kubernetes/manifests
+    are configured by the Kubernetes control plane managed by EKS.
+    AWS is responsible for proper ownership and permissions on control plane hosts.
+    See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

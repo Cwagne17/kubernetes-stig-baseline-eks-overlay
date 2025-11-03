@@ -40,8 +40,14 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
 # --- BEGIN CUSTOM CODE ---
-describe 'Kubelet must have the SSL Certificate Authority set.' do
-  it 'is not a finding in Amazon EKS because On Amazon EKS, the control plane is AWS-managed. The cluster’s certificate authority is exposed via the EKS API and is what clients (kubectl/kubelet) trust for the API server; see https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html' do
+describe 'Kubelet must have the SSL Certificate Authority set' do
+  it <<~JUSTIFICATION do
+    is not a finding because the cluster certificate authority
+    is configured by the Kubernetes control plane managed by EKS and is exposed via the EKS API.
+    This certificate authority is what clients (kubectl/kubelet) trust for authenticating the API server.
+    Customers should configure worker node kubelets to use the clientCAFile setting pointing to the cluster CA.
+    See https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html
+  JUSTIFICATION
     expect(true).to eq true
   end
 end

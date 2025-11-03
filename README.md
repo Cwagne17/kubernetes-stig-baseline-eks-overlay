@@ -2,10 +2,11 @@
 
 [![validate](https://github.com/Cwagne17/kubernetes-stig-baseline-eks-overlay/actions/workflows/validate.yml/badge.svg)](https://github.com/Cwagne17/kubernetes-stig-baseline-eks-overlay/actions/workflows/validate.yml)
 [![test](https://github.com/Cwagne17/kubernetes-stig-baseline-eks-overlay/actions/workflows/test.yml/badge.svg)](https://github.com/Cwagne17/kubernetes-stig-baseline-eks-overlay/actions/workflows/test.yml)
-[![release](https://github.com/Cwagne17/kubernetes-stig-baseline-eks-overlay/actions/workflows/release.yml/badge.svg)](https://github.com/Cwagne17/kubernetes-stig-baseline-eks-overlay/actions/workflows/release.yml)
-![STIG](https://img.shields.io/badge/STIG-V2R4-blue)
-![Version](https://img.shields.io/badge/Profile-2.4.0-informational)
-![License](https://img.shields.io/badge/License-Apache--2.0-green)
+![STIG](https://img.shields.io/badge/Kubernetes_STIG-V2R4-blue)
+[![Last Commit](https://img.shields.io/github/last-commit/Cwagne17/kubernetes-stig-baseline-eks-overlay)](https://github.com/Cwagne17/kubernetes-stig-baseline-eks-overlay/commits)
+[![Open Issues](https://img.shields.io/github/issues/Cwagne17/kubernetes-stig-baseline-eks-overlay)](https://github.com/Cwagne17/kubernetes-stig-baseline-eks-overlay/issues)
+[![License](https://img.shields.io/badge/License-Apache--2.0-green)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-cwagne17-orange)](https://buymeacoffee.com/cwagne17)
 
 Chef InSpec overlay implementing the **DISA Kubernetes STIG (V2R4)**, tailored for **Amazon EKS** clusters.  
 This profile layers EKS-specific logic on top of the upstream Kubernetes STIG baseline—adding tailored inputs, helper resources, and documented exemptions for managed control-plane components.
@@ -44,3 +45,9 @@ See `.github/workflows/*.yml`.
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for branching, commit style, and release flow.  
 Security issues: see [SECURITY.md](SECURITY.md).
+
+## Support the project
+
+If this overlay (or my other AWS/IaC/security tools) saves you time, consider supporting ongoing work:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-cwagne17-orange)](https://buymeacoffee.com/cwagne17)
