@@ -20,11 +20,11 @@ If the setting "tls-min-version" is not configured in the Kubernetes Scheduler m
   tag 'documentable'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane scheduler must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.' do
-  it 'is not a finding in Amazon EKS because Amazon EKS manages the Kubernetes scheduler. Customers cannot configure scheduler flags such as --tls-min-version; see https://docs.aws.amazon.com/general/latest/gr/rande.html#FIPS-endpoints' do
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane scheduler must use TLS 1.2, at a minimum' do
+    it 'is not a finding. Amazon EKS manages the Kubernetes scheduler as part of the control plane and requires TLS 1.2 as a minimum when using FIPS endpoints; see https://docs.aws.amazon.com/general/latest/gr/rande.html#FIPS-endpoints' do
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

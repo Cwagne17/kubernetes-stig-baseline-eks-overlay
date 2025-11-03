@@ -22,11 +22,11 @@ Set the value of "--peer-auto-tls" to "false".'
   tag 'documentable'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination.' do
-  it 'is not a finding in Amazon EKS because EKS operates the etcd peer cluster within the managed control plane; customers can’t set --peer-auto-tls. AWS requires TLS 1.2 (recommended TLS 1.3) for EKS service communications, meeting the STIG aim to block SSL and legacy TLS.' do
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination.' do
+    it 'is not a finding in Amazon EKS because EKS operates the etcd peer cluster within the managed control plane; AWS states for EKS FIPS endpoints that TLS 1.2 is required and TLS 1.3 is recommended for clients connecting to the service, which satisfies the STIG\'s intent to disallow SSL and unauthorized TLS versions; see https://docs.aws.amazon.com/general/latest/gr/rande.html#FIPS-endpoints' do
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end
