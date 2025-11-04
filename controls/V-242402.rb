@@ -22,7 +22,28 @@ Note: If the API server is running as a Pod, then the manifest will also need to
   tag cci: ['CCI-001464']
   tag nist: ['AU-14 (1)']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Check to see if the EKS cluster is setup with audit logging enabled.
+
+  # EKS Context: Audit logging in EKS is configured at the cluster level via CloudWatch Logs.
+  # The --audit-log-path flag is not directly accessible as the Control Plane is AWS-managed.
+  # Instead, we check if audit logging is enabled for the EKS cluster.
+  
+  cluster_name = input('cluster_name')
+  eks_cluster = aws_eks_cluster(cluster_name)
+
+  describe 'EKS cluster audit logging' do
+    it 'should have audit logging enabled' do
+      expect(eks_cluster.audit_logging_enabled?).to eq(true), <<~MSG
+        Audit logging must be enabled for the EKS cluster to capture API server events.
+        EKS sends audit logs to CloudWatch Logs when enabled at the cluster level.
+        
+        Cluster: #{cluster_name}
+        Audit logging enabled: #{eks_cluster.audit_logging_enabled?}
+        Currently enabled log types: #{eks_cluster.enabled_log_types.inspect}
+        
+        See: https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html
+      MSG
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

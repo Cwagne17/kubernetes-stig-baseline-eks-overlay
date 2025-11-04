@@ -28,7 +28,27 @@ Note: Kubernetes Skew Policy can be found at: https://kubernetes.io/docs/setup/r
   tag cci: ['CCI-002635']
   tag nist: ['SI-3 (10) (a)']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Kubernetes API (will require manual review to verify patch levels against IAVM/CTO/DTM/STIGs)
+
+  # EKS Context: Cluster version is managed by AWS and can be queried via EKS API.
+  # Manual review required to verify version is current per IAVM/CTO/DTM/STIG guidance.
+  
+  cluster_name = input('cluster_name')
+  eks_cluster = aws_eks_cluster(cluster_name)
+
+  describe 'Kubernetes version compliance' do
+    it 'requires manual review of cluster version against current IAVM/CTO/DTM/STIG requirements' do
+      skip <<~MSG
+        Manual verification required to ensure Kubernetes version is current.
+        
+        Current EKS cluster version: #{eks_cluster.version}
+        Cluster: #{cluster_name}
+        
+        Verify this version is supported per Kubernetes skew policy and current security guidance:
+        - Kubernetes Skew Policy: https://kubernetes.io/docs/setup/release/version-skew-policy/#supported-versions
+        - EKS Supported Versions: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html
+      MSG
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

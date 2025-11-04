@@ -18,7 +18,20 @@ If the setting "audit-log-maxage" is not set in the Kubernetes API Server manife
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Check if audit log retention is configured on the EKS cluster via AWS EKS API.
+
+  # EKS Context: Audit logs are sent to CloudWatch Logs with configurable retention policies.
+  # The audit-log-maxage setting is not applicable as logs are not stored as rotating files.
+  
+  cluster_name = input('cluster_name')
+  eks_cluster = aws_eks_cluster(cluster_name)
+  
+  describe 'Kubernetes API Server audit logs' do
+    it 'should have EKS cluster audit logs enabled' do
+      expect(eks_cluster.audit_logging_enabled?).to eq(true), <<~MSG
+        EKS cluster audit logging is not enabled for cluster #{cluster_name}.
+      MSG
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

@@ -40,6 +40,35 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+
+  # EKS Context: Kubelet TLS configuration is managed by AWS using serverTLSBootstrap.
+  # EKS automatically configures kubelet with serverTLSBootstrap enabled, which allows
+  # kubelet to automatically request and rotate its own serving certificates from the
+  # Kubernetes CA without requiring static tlsPrivateKeyFile configuration.
+  
+  describe 'Kubelet TLS private key configuration' do
+    it <<~JUSTIFICATION do
+      is not a finding because EKS manages kubelet TLS certificates using serverTLSBootstrap.
+      
+      EKS kubelet is configured with serverTLSBootstrap enabled, which provides automatic
+      certificate generation and rotation for kubelet serving certificates. This eliminates
+      the need for static tlsPrivateKeyFile and tlsCertFile configuration.
+      
+      The kubelet automatically:
+      - Generates a private key
+      - Requests a serving certificate from the Kubernetes CA
+      - Rotates certificates before expiration
+      
+      Current kubelet configuration shows serverTLSBootstrap: #{kubelet.get_config_value('serverTLSBootstrap')}
+      
+      This approach is more secure than static certificate files as it enables automatic
+      rotation and reduces the risk of expired certificates.
+      
+      See: https://kubernetes.io/docs/reference/access-authn-authz/kubelet-tls-bootstrapping/
+    JUSTIFICATION
+      expect(kubelet.get_config_value('serverTLSBootstrap')).to eq(true)
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

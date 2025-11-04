@@ -20,7 +20,24 @@ Set the value of "--audit-log-maxsize" to a minimum of "100".'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Check if audit log is configured on the EKS cluster via AWS EKS API to send to CloudWatch Logs or S3.
+
+  # EKS Context: Audit logs are sent to CloudWatch Logs, not stored as files with size limits.
+  # CloudWatch Logs provides scalable, managed log storage with configurable retention.
+  
+  cluster_name = input('cluster_name')
+  eks_cluster = aws_eks_cluster(cluster_name)
+
+  describe 'Kubernetes API Server audit logs' do
+    it 'should have EKS cluster audit logs enabled to send to CloudWatch Logs' do
+      expect(eks_cluster.audit_logging_enabled?).to eq(true), <<~MSG
+        EKS cluster audit logging is not enabled for cluster #{cluster_name}.
+        Enable audit logging first before configuring retention settings.
+        
+        aws eks update-cluster-config --region $AWS_REGION --name #{cluster_name} \\
+          --logging '{"clusterLogging":[{"types":["api","audit","authenticator","controllerManager","scheduler"],"enabled":true}]}'
+      MSG
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

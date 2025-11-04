@@ -90,3 +90,6 @@ report.md
 # *xccdf.xml
 check-results.txt
 kitchen.local.ec2.yml
+
+# InSpec inputs (may contain sensitive cluster information)
+inputs.yml

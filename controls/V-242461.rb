@@ -18,7 +18,29 @@ If the setting "audit-policy-file" is not set or is found in the Kubernetes API 
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Check if audit logging is enabled on the EKS cluster via AWS EKS API.
+
+  # EKS Context: Audit logging in EKS is configured to send logs to CloudWatch Logs.
+  # The audit-policy-file setting is AWS-managed and not directly accessible.
+  
+  cluster_name = input('cluster_name')
+  eks_cluster = aws_eks_cluster(cluster_name)
+
+  describe 'Kubernetes API Server audit logs' do
+    it 'should have EKS cluster audit logs enabled to send to CloudWatch' do
+      # EKS sends audit logs to CloudWatch Logs when enabled
+      # Current enabled log types: #{eks_cluster.enabled_log_types.inspect}
+      
+      expect(eks_cluster.audit_logging_enabled?).to eq(true), <<~MSG
+        EKS cluster audit logging is not enabled for cluster #{cluster_name}.
+        
+        Enable audit logging to send Kubernetes API Server audit logs to CloudWatch Logs with:
+        aws eks update-cluster-config --region $AWS_REGION --name #{cluster_name} \\
+          --logging '{"clusterLogging":[{"types":["api","audit","authenticator","controllerManager","scheduler"],"enabled":true}]}'
+        
+        See: https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html
+      MSG
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

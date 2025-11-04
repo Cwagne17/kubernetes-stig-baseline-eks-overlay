@@ -56,6 +56,63 @@ class KubectlClient < Inspec.resource(1)
     { 'headers' => headers, 'rows' => rows }
   end
 
+  # Helper method to get all namespaces
+  def self.get_namespaces(kubeconfig: nil, context: nil)
+    client = new('get namespaces -o json', kubeconfig: kubeconfig, context: context)
+    return [] unless client.success?
+    
+    client.json&.dig('items') || []
+  end
+
+  # Helper method to get resources of a specific type
+  def self.get_resources(resource_type, namespace: nil, kubeconfig: nil, context: nil)
+    cmd = "get #{resource_type} -o json"
+    client = new(cmd, kubeconfig: kubeconfig, context: context, namespace: namespace)
+    return [] unless client.success?
+    
+    client.json&.dig('items') || []
+  end
+
+  # Helper method to check if a resource exists
+  def self.resource_exists?(resource_type, name, namespace: nil, kubeconfig: nil, context: nil)
+    cmd = "get #{resource_type} #{name} --ignore-not-found -o name"
+    client = new(cmd, kubeconfig: kubeconfig, context: context, namespace: namespace)
+    client.success? && !client.stdout.strip.empty?
+  end
+
+  # Helper method to get pods using secrets as environment variables
+  def self.get_pods_with_secret_env_vars(kubeconfig: nil, context: nil)
+    pods = get_resources('pods', kubeconfig: kubeconfig, context: context)
+    pods_with_secrets = []
+    
+    pods.each do |pod|
+      pod_name = pod.dig('metadata', 'name')
+      pod_namespace = pod.dig('metadata', 'namespace')
+      containers = pod.dig('spec', 'containers') || []
+      
+      containers.each do |container|
+        env_vars = container['env'] || []
+        env_from = container['envFrom'] || []
+        
+        has_secret_env = env_vars.any? do |env|
+          env.key?('valueFrom') && env['valueFrom'].key?('secretKeyRef')
+        end
+        
+        has_secret_env_from = env_from.any? { |ef| ef.key?('secretRef') }
+        
+        if has_secret_env || has_secret_env_from
+          pods_with_secrets << {
+            name: pod_name,
+            namespace: pod_namespace,
+            container: container['name']
+          }
+        end
+      end
+    end
+    
+    pods_with_secrets
+  end
+
   def to_s
     "kubectl_client(#{@cmd})"
   end

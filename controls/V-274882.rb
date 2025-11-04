@@ -54,7 +54,25 @@ The encryption config must specify the Secret's resource and provider. Below is 
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Check if secret encryption is enabled on the EKS cluster via AWS EKS API using AWS KMS.
+
+  # EKS Context: Secrets encryption in EKS uses AWS KMS for envelope encryption.
+  # The encryption-provider-config is managed by AWS when envelope encryption is enabled.
+  
+  cluster_name = input('cluster_name')
+  eks_cluster = aws_eks_cluster(cluster_name)
+
+  describe 'Kubernetes Secrets encryption at rest' do
+    it 'should have envelope encryption enabled using AWS KMS' do
+      expect(eks_cluster.secrets_encrypted?).to eq(true), <<~MSG
+        EKS cluster does not have Secrets encryption enabled for cluster #{cluster_name}.
+        
+        Secrets encryption must be enabled at cluster creation time.
+        To create a new cluster with encryption enabled:
+        
+        See: https://docs.aws.amazon.com/eks/latest/userguide/enable-kms.html
+      MSG
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end
