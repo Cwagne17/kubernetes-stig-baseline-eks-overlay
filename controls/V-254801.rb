@@ -50,6 +50,41 @@ systemctl daemon-reload && systemctl restart kubelet)
   tag cci: ['CCI-002263']
   tag nist: ['AC-16 a']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+  
+  # EKS Context: This check applies to Worker Nodes only.
+  # EKS-managed Control Plane nodes are not accessible for direct inspection.
+  # Note: PodSecurity feature gate is GA (generally available) as of Kubernetes v1.25.
+  
+  kl = kubelet
+  feature_gates_cfg = kl.get_config_value('featureGates')
+  
+  # Check 1: --feature-gates flag must not be present in kubelet command line
+  describe 'Kubelet --feature-gates command-line flag' do
+    it 'should not be present on Worker Nodes' do
+      expect(kl.flags.key?('feature-gates')).to eq(false), <<~MSG
+        The --feature-gates command-line flag was found on the kubelet process.
+        Current value: #{kl.flags['feature-gates']}
+      MSG
+    end
+  end
+  
+  # Check 2: featureGates must be present with PodSecurity explicitly enabled
+  describe 'Kubelet config featureGates' do
+    it 'should be present in the kubelet configuration' do
+      expect(feature_gates_cfg).not_to be_nil, <<~MSG
+        The featureGates setting is not present in the kubelet configuration.
+        Config path: #{kl.config_path}
+      MSG
+    end
+    
+    it 'should have PodSecurity explicitly set to true' do
+      expect(feature_gates_cfg&.fetch('PodSecurity', nil)).to eq(true), <<~MSG
+        The PodSecurity feature gate is not explicitly enabled in the kubelet configuration.
+        Config path: #{kl.config_path}
+        Current featureGates: #{feature_gates_cfg.inspect}
+      MSG
+    end
+  end
+  
   # --- END CUSTOM CODE ---
 end

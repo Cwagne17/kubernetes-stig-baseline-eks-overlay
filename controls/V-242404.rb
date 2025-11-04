@@ -29,10 +29,30 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag nist: ['CM-5 (6)']
   # --- BEGIN CUSTOM CODE ---
 
-  # Check kubelet process for --hostname-override flag
-  describe processes('kubelet').commands.to_s do
-    it 'must not have --hostname-override flag' do
-      expect(subject).not_to match(/--hostname-override/)
+  # EKS Context: Amazon EKS-optimized AMIs use --hostname-override by default
+  # to set the node name to match the EC2 instance's private DNS name.
+  # This is required for proper cluster join and node identification in EKS.
+  
+  describe 'Kubelet --hostname-override flag' do
+    it 'should not be present' do
+      kubelet_command = processes('kubelet').commands.to_s
+      expect(kubelet_command).not_to match(/--hostname-override/), <<~MSG
+        The --hostname-override flag was found on the kubelet process.
+        
+        Amazon EKS nodes register to the API server using the instance's EC2 private DNS 
+        name. On EKS-optimized AMIs, bootstrap/nodeadm may pass --hostname-override for 
+        consistency, but with the AWS cloud provider enabled, kubelet uses provider logic 
+        for the node name and can ignore the flag. Either way, nodes register with the EC2 
+        private DNS name.
+        
+        While the STIG recommends avoiding hostname override, EKS requires this for proper
+        cluster operation. Consider accepting this as a risk or implementing compensating
+        controls such as ensuring DNS resolution is properly configured and monitoring node
+        registration events.
+        
+        See: https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html
+        Current command: #{kubelet_command}
+      MSG
     end
   end
 

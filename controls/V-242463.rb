@@ -19,5 +19,6 @@ If the setting "audit-log-maxbackup" is not set in the Kubernetes API Server man
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Check if audit log is configured on the EKS cluster via AWS EKS API to send to CloudWatch Logs or S3.
   # --- END CUSTOM CODE ---
 end

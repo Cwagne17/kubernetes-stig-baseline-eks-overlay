@@ -48,6 +48,38 @@ service kubelet restart)
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+  
+  # EKS Context: This check applies to Worker Nodes only.
+  # EKS-managed Control Plane nodes are not accessible for direct inspection.
+  # AWS manages the API server configuration including feature gates.
+  
+  kl = kubelet
+  feature_gates_cfg = kl.get_config_value('featureGates')
+  
+  # Check 1: --feature-gates flag must not be present in kubelet command line
+  describe 'Kubelet --feature-gates command-line flag' do
+    it 'should not be present on Worker Nodes' do
+      expect(kl.flags.key?('feature-gates')).to eq(false), <<~MSG
+        The --feature-gates command-line flag was found on the kubelet process.
+        Current value: #{kl.flags['feature-gates']}
+      MSG
+    end
+  end
+  
+  # Check 2: DynamicAuditing must not be enabled in featureGates config
+  describe 'Kubelet config featureGates' do
+    if feature_gates_cfg
+      it 'should not have DynamicAuditing set to true' do
+        expect(feature_gates_cfg['DynamicAuditing']).not_to eq(true), <<~MSG
+          The DynamicAuditing feature gate is enabled in the kubelet configuration.
+          Config path: #{kl.config_path}
+          Current featureGates: #{feature_gates_cfg.inspect}
+        MSG
+      end
+    else
+      skip 'featureGates does not exist in kubelet config'
+    end
+  end
+  
   # --- END CUSTOM CODE ---
 end

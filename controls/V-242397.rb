@@ -67,19 +67,28 @@ d. Restart the kubelet service using the following command:
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
 
-  kubelet_config_path = input('kubelet_config_path')
+  # EKS Context: This check applies to Worker Nodes only.
+  # Static pods should not be used on Worker Nodes as they bypass API Server admission control.
+  
+  kl = kubelet
+  static_pod_path = kl.get_config_value('staticPodPath')
 
-  # Check kubelet process for --pod-manifest-path flag
-  describe processes('kubelet').commands.to_s do
-    it 'must not have --pod-manifest-path flag' do
-      expect(subject).not_to match(/--pod-manifest-path/)
+  describe 'Kubelet --pod-manifest-path command-line flag' do
+    it 'should not be present on Worker Nodes' do
+      expect(kl.flags.key?('pod-manifest-path')).to eq(false), <<~MSG
+        The --pod-manifest-path command-line flag was found on the kubelet process.
+        Current value: #{kl.flags['pod-manifest-path']}
+      MSG
     end
   end
 
-  # Check kubelet config file for staticPodPath setting
-  if file(kubelet_config_path).exist?
-    describe json(kubelet_config_path) do
-      its(['staticPodPath']) { should be_nil }
+  describe 'Kubelet config staticPodPath' do
+    it 'should not be set' do
+      expect(static_pod_path).to be_nil, <<~MSG
+        The kubelet staticPodPath must not be set on Worker Nodes to prevent bypassing API Server admission control.
+        Config path: #{kl.config_path}
+        Current value: #{static_pod_path.inspect}
+      MSG
     end
   end
 

@@ -23,5 +23,6 @@ Note: If the API server is running as a Pod, then the manifest will also need to
   tag nist: ['AU-14 (1)']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Check to see if the EKS cluster is setup with audit logging enabled.
   # --- END CUSTOM CODE ---
 end

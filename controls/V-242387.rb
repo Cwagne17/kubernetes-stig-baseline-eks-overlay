@@ -37,19 +37,28 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
 
-  kubelet_config_path = input('kubelet_config_path')
+  # EKS Context: This check applies to Worker Nodes only.
+  # The Control Plane is fully managed by AWS and not accessible for inspection.
+  
+  kl = kubelet
+  read_only_port = kl.get_config_value('readOnlyPort')
 
-  # Check kubelet process for --read-only-port flag
-  describe processes('kubelet').commands.to_s do
-    it 'must not have --read-only-port flag' do
-      expect(subject).not_to match(/--read-only-port/)
+  describe 'Kubelet --read-only-port command-line flag' do
+    it 'should not be present on Worker Nodes' do
+      expect(kl.flags.key?('read-only-port')).to eq(false), <<~MSG
+        The --read-only-port command-line flag was found on the kubelet process.
+        Current value: #{kl.flags['read-only-port']}
+      MSG
     end
   end
 
-  # Check kubelet config file for readOnlyPort setting
-  if file(kubelet_config_path).exist?
-    describe json(kubelet_config_path) do
-      its(['readOnlyPort']) { should be_nil.or eq(0) }
+  describe 'Kubelet config readOnlyPort' do
+    it 'should be disabled (set to 0 or absent)' do
+      expect([nil, 0]).to include(read_only_port), <<~MSG
+        The kubelet readOnlyPort must be disabled by setting it to 0 or removing it.
+        Config path: #{kl.config_path}
+        Current value: #{read_only_port.inspect}
+      MSG
     end
   end
 

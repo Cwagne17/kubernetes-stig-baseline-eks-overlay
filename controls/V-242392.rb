@@ -26,21 +26,28 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
 
-  kubelet_config_path = input('kubelet_config_path')
+  # EKS Context: This check applies to Worker Nodes only.
+  # The Control Plane is fully managed by AWS and not accessible for inspection.
+  
+  kl = kubelet
+  authorization_mode = kl.get_config_value('authorization', 'mode')
 
-  # Check kubelet process for --authorization-mode flag
-  describe processes('kubelet').commands.to_s do
-    it 'must have --authorization-mode set to Webhook if flag is present' do
-      if subject.match?(/--authorization-mode/)
-        expect(subject).to match(/--authorization-mode[= ]Webhook/)
-      end
+  describe 'Kubelet --authorization-mode command-line flag' do
+    it 'should not be present on Worker Nodes' do
+      expect(kl.flags.key?('authorization-mode')).to eq(false), <<~MSG
+        The --authorization-mode command-line flag was found on the kubelet process.
+        Current value: #{kl.flags['authorization-mode']}
+      MSG
     end
   end
 
-  # Check kubelet config file for authorization.mode setting
-  if file(kubelet_config_path).exist?
-    describe json(kubelet_config_path) do
-      its(['authorization', 'mode']) { should cmp 'Webhook' }
+  describe 'Kubelet config authorization.mode' do
+    it 'should be set to Webhook' do
+      expect(authorization_mode).to eq('Webhook'), <<~MSG
+        The kubelet authorization mode must be set to Webhook for explicit authorization.
+        Config path: #{kl.config_path}
+        Current value: #{authorization_mode.inspect}
+      MSG
     end
   end
 

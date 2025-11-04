@@ -22,5 +22,6 @@ kubectl delete deployment kubernetes-dashboard --namespace=kube-system'
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API
   # --- END CUSTOM CODE ---
 end

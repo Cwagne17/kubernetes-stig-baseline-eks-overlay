@@ -30,5 +30,6 @@ chown root:root <location from kubeconfig>.'
   # is self-hosted on nodes (DaemonSet), this control should perform node-level checks
   # (e.g., locate the kube-proxy kubeconfig and validate ownership and permissions).
   # No executable logic implemented yet.
+  # Worker Node
   # --- END CUSTOM CODE ---
 end

@@ -25,6 +25,15 @@ Set the value of "--insecure-port" to "0".'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+  describe "Control-plane API server must have the insecure port flag disabled" do
+    it <<~JUSTIFICATION do
+      is not a finding because the --insecure-port flag
+      is configured by the Kubernetes control plane managed by EKS.
+      Additionally, the --insecure-port flag is not available in any Kubernetes version supported by EKS.
+      https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html
+    JUSTIFICATION
+      expect(true).to eq true
+    end
+  end
   # --- END CUSTOM CODE ---
 end

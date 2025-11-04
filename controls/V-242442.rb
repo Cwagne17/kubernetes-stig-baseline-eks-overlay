@@ -26,5 +26,6 @@ kubectl delete pod podname
   tag nist: ['SI-4 d']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API
   # --- END CUSTOM CODE ---
 end

@@ -39,5 +39,6 @@ If a return value is returned from the "kubectl get all" command and it is not t
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API
   # --- END CUSTOM CODE ---
 end

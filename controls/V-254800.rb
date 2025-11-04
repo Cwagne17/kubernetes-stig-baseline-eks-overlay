@@ -55,5 +55,7 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
   tag nist: ['AC-16 a']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Pod Security Admission configuration in EKS is managed by AWS in all supported versions.
+  # See https://docs.aws.amazon.com/eks/latest/userguide/pod-security-admission.html
   # --- END CUSTOM CODE ---
 end

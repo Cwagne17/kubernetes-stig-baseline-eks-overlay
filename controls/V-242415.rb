@@ -82,5 +82,6 @@ If any of the values returned reference environment variables, this is a finding
   tag nist: ['IA-5 (1) (d)', 'IA-5 (1) (c)']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API
   # --- END CUSTOM CODE ---
 end

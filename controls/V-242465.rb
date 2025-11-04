@@ -19,5 +19,6 @@ If the setting audit-log-path is not set in the Kubernetes API Server manifest f
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Check if audit logging is enabled on the EKS cluster via AWS EKS API.
   # --- END CUSTOM CODE ---
 end

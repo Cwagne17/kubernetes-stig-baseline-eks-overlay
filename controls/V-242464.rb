@@ -19,5 +19,6 @@ If the setting "audit-log-maxage" is not set in the Kubernetes API Server manife
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Check if audit log retention is configured on the EKS cluster via AWS EKS API.
   # --- END CUSTOM CODE ---
 end

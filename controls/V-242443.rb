@@ -29,5 +29,6 @@ Note: Kubernetes Skew Policy can be found at: https://kubernetes.io/docs/setup/r
   tag nist: ['SI-3 (10) (a)']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API (will require manual review to verify patch levels against IAVM/CTO/DTM/STIGs)
   # --- END CUSTOM CODE ---
 end

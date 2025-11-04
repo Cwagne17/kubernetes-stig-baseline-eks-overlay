@@ -23,5 +23,6 @@ If any sensitive information is found, this is a finding.'
   tag nist: ['IA-5 (1) (d)']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API
   # --- END CUSTOM CODE ---
 end

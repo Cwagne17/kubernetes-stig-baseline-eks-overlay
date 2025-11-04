@@ -55,5 +55,6 @@ The encryption config must specify the Secret's resource and provider. Below is 
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Check if secret encryption is enabled on the EKS cluster via AWS EKS API using AWS KMS.
   # --- END CUSTOM CODE ---
 end

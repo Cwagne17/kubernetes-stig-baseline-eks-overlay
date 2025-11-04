@@ -29,6 +29,53 @@ All the manifest files should now have privileges of "644".'
   tag cci: ['CCI-001499', 'CCI-000366']
   tag nist: ['CM-5 (6)', 'CM-6 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+
+  # EKS Context: This check applies to both Control Plane and Worker Nodes.
+  # On EKS Worker Nodes, the /etc/kubernetes/manifests directory typically does not exist
+  # as static pods are not used. This is the expected and secure configuration.
+  
+  manifest_dir = '/etc/kubernetes/manifests'
+
+  # If directory doesn't exist, this is expected for EKS Worker Nodes (not a finding)
+  unless file(manifest_dir).exist?
+    describe 'Manifest directory compliance' do
+      it <<~JUSTIFICATION do
+        is not a finding because the /etc/kubernetes/manifests directory does not exist.
+        This is the expected and secure configuration for EKS Worker Nodes.
+        EKS Worker Nodes do not use static pods, which helps ensure all pods are properly
+        governed by the API Server and subject to admission control policies.
+      JUSTIFICATION
+        expect(true).to eq true
+      end
+    end
+    next
+  end
+
+  # Get all files in the manifest directory
+  manifest_files = command("find #{manifest_dir} -maxdepth 1 -type f").stdout.split("\n").reject(&:empty?)
+  
+  # If directory exists but is empty, this is also expected (not a finding)
+  if manifest_files.empty?
+    describe 'Manifest directory compliance' do
+      it <<~JUSTIFICATION do
+        is not a finding because the /etc/kubernetes/manifests directory exists but contains no manifest files.
+        This is the expected configuration for EKS Worker Nodes where static pods are not used.
+        Static pods on Worker Nodes would bypass API Server admission control and are not recommended.
+      JUSTIFICATION
+        expect(true).to eq true
+      end
+    end
+    next
+  end
+
+  # If manifest files exist, check their permissions
+  manifest_files.each do |manifest_file|
+    describe file(manifest_file) do
+      it 'should have permissions 0644 or more restrictive' do
+        expect(subject).not_to be_more_permissive_than('0644')
+      end
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

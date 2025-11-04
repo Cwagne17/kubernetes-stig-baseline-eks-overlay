@@ -23,5 +23,6 @@ If Secrets are attached to applications without a documented requirement, this i
   tag nist: ['SC-28 (1)']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API
   # --- END CUSTOM CODE ---
 end

@@ -22,6 +22,15 @@ Set the value of "AllAlpha" to "false" or remove the setting completely. (AllAlp
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+  describe 'Control-plane API server Alpha APIs configuration' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --feature-gates setting
+      is configured by the Kubernetes control plane managed by EKS.
+      Alpha APIs are disabled by default in EKS-managed API servers.
+      This control applies to Control Plane nodes only, which are not accessible in EKS.
+    JUSTIFICATION
+      expect(true).to eq true
+    end
+  end
   # --- END CUSTOM CODE ---
 end

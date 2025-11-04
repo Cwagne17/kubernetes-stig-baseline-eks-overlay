@@ -89,6 +89,16 @@ kubectl create -f restricted.yml"
   tag cci: ['CCI-002263']
   tag nist: ['AC-16 a']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+  describe 'Kubernetes Pod Security Policies have been deprecated as of version 1.21 and removed in version 1.25.' do
+    it <<~JUSTIFICATION do
+      is not a finding because Pod Security Policies
+      have been deprecated and removed in Kubernetes versions managed by EKS.
+      EKS requires using Pod Security Admission (PSA) to enforce pod security standards
+      with Policy-as-Code solutions or Pod Security Standards built into Kubernetes.
+      See https://docs.aws.amazon.com/eks/latest/best-practices/pod-security.html#_pod_security_solutions
+    JUSTIFICATION
+      expect(true).to eq true
+    end
+  end
   # --- END CUSTOM CODE ---
 end

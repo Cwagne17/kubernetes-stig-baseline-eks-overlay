@@ -21,5 +21,6 @@ If any user pods are present in the Kubernetes system namespaces, this is a find
   tag nist: ['SC-2']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API
   # --- END CUSTOM CODE ---
 end

@@ -19,6 +19,60 @@ If the Control Plane or any Worker nodes are not using kubectl version 1.12.9 or
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+
+  # EKS Context: kubectl is typically not installed on Worker Nodes.
+  # It's installed on Control Plane nodes (managed by AWS) or administrative workstations.
+  
+  # Check if kubectl is installed
+  kubectl_path = command('which kubectl').stdout.strip
+  
+  unless command('which kubectl').exit_status == 0
+    describe 'kubectl installation' do
+      it <<~JUSTIFICATION do
+        is not a finding because kubectl is not installed on this Worker Node.
+        EKS Worker Nodes do not require kubectl installation as they run the kubelet agent
+        to communicate with the Control Plane. kubectl is typically only installed on
+        administrative workstations or bastion hosts used to manage the cluster.
+        See https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
+      JUSTIFICATION
+        expect(true).to eq true
+      end
+    end
+    next
+  end
+
+  # If kubectl is installed, check the version
+  kubectl_version_output = command('kubectl version --client -o json 2>/dev/null || kubectl version --client --short 2>/dev/null').stdout
+  
+  # Try to parse version from output
+  if kubectl_version_output =~ /"gitVersion":\s*"v?(\d+\.\d+\.\d+)"/
+    version_string = Regexp.last_match(1)
+  elsif kubectl_version_output =~ /Client Version:\s*v?(\d+\.\d+\.\d+)/
+    version_string = Regexp.last_match(1)
+  else
+    version_string = nil
+  end
+
+  describe 'kubectl version' do
+    it 'should be 1.12.9 or newer' do
+      skip 'Unable to determine kubectl version from output' if version_string.nil?
+      
+      version_parts = version_string.split('.').map(&:to_i)
+      major, minor, patch = version_parts
+      
+      # Check if version is >= 1.12.9
+      is_compliant = (major > 1) ||
+                     (major == 1 && minor > 12) ||
+                     (major == 1 && minor == 12 && patch >= 9)
+      
+      expect(is_compliant).to eq(true), <<~MSG
+        kubectl version must be 1.12.9 or newer to prevent vulnerabilities in the 'kubectl cp' command.
+        Current version: #{version_string}
+        Minimum required: 1.12.9
+        kubectl path: #{kubectl_path}
+      MSG
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

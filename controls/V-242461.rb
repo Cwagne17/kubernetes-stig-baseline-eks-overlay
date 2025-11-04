@@ -19,5 +19,6 @@ If the setting "audit-policy-file" is not set or is found in the Kubernetes API 
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Check if audit logging is enabled on the EKS cluster via AWS EKS API.
   # --- END CUSTOM CODE ---
 end

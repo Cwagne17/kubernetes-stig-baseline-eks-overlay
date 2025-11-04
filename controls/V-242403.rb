@@ -50,5 +50,6 @@ Note: If the API server is running as a Pod, then the manifest will also need to
   tag nist: ['AC-2 (4)', 'AU-3 a', 'AU-3 b', 'AU-3 c', 'AU-3 d', 'AU-3 e', 'AU-3 (1)', 'AU-12 c', 'AC-2 (4)', 'AC-2 (4)', 'AU-3 f', 'AC-16 a']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # The policy file cannot be changed by the EKS customer. Audit logging should be enabled though the EKS cluster settings.
   # --- END CUSTOM CODE ---
 end

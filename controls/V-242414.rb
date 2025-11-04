@@ -29,5 +29,6 @@ If any host-privileged ports are returned for any of the pods, this is a finding
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
   # TODO: Control not yet implemented.
+  # Kubernetes API
   # --- END CUSTOM CODE ---
 end
