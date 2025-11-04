@@ -27,7 +27,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
 
   # Check kubelet process for --hostname-override flag
   describe processes('kubelet').commands.to_s do
@@ -36,5 +36,5 @@ systemctl daemon-reload && systemctl restart kubelet'
     end
   end
 
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

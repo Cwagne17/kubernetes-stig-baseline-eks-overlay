@@ -22,16 +22,16 @@ Remove the value of "--insecure-bind-address" setting.'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane API server must have the insecure bind address not set' do
-  it <<~JUSTIFICATION do
-    is not a finding because the --insecure-bind-address and --insecure-bind-port flags
-    are configured by the Kubernetes control plane managed by EKS.
-    EKS exposes only the managed HTTPS API endpoint; there is no insecure bind interface.
-    See https://docs.aws.amazon.com/eks/latest/userguide/infrastructure-security.html
-  JUSTIFICATION
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane API server must have the insecure bind address not set' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --insecure-bind-address and --insecure-bind-port flags
+      are configured by the Kubernetes control plane managed by EKS.
+      EKS exposes only the managed HTTPS API endpoint; there is no insecure bind interface.
+      See https://docs.aws.amazon.com/eks/latest/userguide/infrastructure-security.html
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

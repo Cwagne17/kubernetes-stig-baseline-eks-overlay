@@ -25,7 +25,7 @@ chown root:root <kubeadm.conf path>'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
 
   kubeadm_conf_path = input('kubeadm_conf_path')
 
@@ -40,5 +40,5 @@ chown root:root <kubeadm.conf path>'
     its('group') { should cmp 'root' }
   end
 
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

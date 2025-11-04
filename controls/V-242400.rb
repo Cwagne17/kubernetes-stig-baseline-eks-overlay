@@ -21,6 +21,7 @@ Set the value of "AllAlpha" to "false" or remove the setting completely. (AllAlp
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

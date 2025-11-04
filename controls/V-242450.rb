@@ -42,17 +42,17 @@ chown root:root <path_to_client_ca_file>'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane client CA file must be owned by root' do
-  it <<~JUSTIFICATION do
-    is not a finding because the client CA file
-    is configured by the Kubernetes control plane managed by EKS.
-    The cluster certificate authority is exposed read-only via the EKS API as certificateAuthority.data
-    and is used by clients (kubectl/kubelet) in kubeconfig.
-    See https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html
-  JUSTIFICATION
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane client CA file must be owned by root' do
+    it <<~JUSTIFICATION do
+      is not a finding because the client CA file
+      is configured by the Kubernetes control plane managed by EKS.
+      The cluster certificate authority is exposed read-only via the EKS API as certificateAuthority.data
+      and is used by clients (kubectl/kubelet) in kubeconfig.
+      See https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

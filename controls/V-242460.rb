@@ -24,16 +24,16 @@ chmod 644 /etc/kubernetes/controller-manager.conf'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- BEGIN CUSTOM CODE ---
-describe 'admin kubeconfig must have file permissions set to 644 or more restrictive' do
-  it <<~JUSTIFICATION do
-    is not a finding because kubeconfig file permissions under /etc/kubernetes
-    are configured by the Kubernetes control plane managed by EKS.
-    AWS is responsible for proper permissions on control plane hosts.
-    See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
-  JUSTIFICATION
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'admin kubeconfig must have file permissions set to 644 or more restrictive' do
+    it <<~JUSTIFICATION do
+      is not a finding because kubeconfig file permissions under /etc/kubernetes
+      are configured by the Kubernetes control plane managed by EKS.
+      AWS is responsible for proper permissions on control plane hosts.
+      See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

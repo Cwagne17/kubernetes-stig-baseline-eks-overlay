@@ -20,7 +20,7 @@ chown root:root /etc/kubernetes/kubelet.conf'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
 
   kubelet_kubeconfig_path = input('kubelet_kubeconfig_path')
 
@@ -40,5 +40,5 @@ chown root:root /etc/kubernetes/kubelet.conf'
     end
   end
 
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

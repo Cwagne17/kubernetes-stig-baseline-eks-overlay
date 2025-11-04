@@ -35,7 +35,7 @@ The kubelet file should now have the permissions of "644".'
   tag 'documentable'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
 
   kubelet_config_path = input('kubelet_config_path')
 
@@ -51,5 +51,5 @@ The kubelet file should now have the permissions of "644".'
     end
   end
 
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

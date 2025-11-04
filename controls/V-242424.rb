@@ -39,6 +39,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

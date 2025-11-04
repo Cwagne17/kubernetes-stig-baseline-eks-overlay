@@ -42,7 +42,7 @@ chmod 644 <path_to_client_ca_file>'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
 
   kubelet_ca_file_path = input('kubelet_ca_file_path')
 
@@ -51,5 +51,5 @@ chmod 644 <path_to_client_ca_file>'
     it { should_not be_more_permissive_than('0644') }
   end
 
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

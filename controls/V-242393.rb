@@ -24,7 +24,7 @@ Note: If access to the worker node is through an SSH session, it is important to
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
 
   describe service('sshd') do
     it 'must not be running' do
@@ -32,5 +32,5 @@ Note: If access to the worker node is through an SSH session, it is important to
     end
   end
 
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

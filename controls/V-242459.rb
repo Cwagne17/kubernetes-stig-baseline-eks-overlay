@@ -20,16 +20,16 @@ chmod -R 644 /var/lib/etcd/*'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane etcd must have file permissions set to 644 or more restrictive' do
-  it <<~JUSTIFICATION do
-    is not a finding because file permissions for etcd data under /var/lib/etcd
-    are configured by the Kubernetes control plane managed by EKS.
-    AWS is responsible for proper permissions on control plane hosts.
-    See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
-  JUSTIFICATION
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane etcd must have file permissions set to 644 or more restrictive' do
+    it <<~JUSTIFICATION do
+      is not a finding because file permissions for etcd data under /var/lib/etcd
+      are configured by the Kubernetes control plane managed by EKS.
+      AWS is responsible for proper permissions on control plane hosts.
+      See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

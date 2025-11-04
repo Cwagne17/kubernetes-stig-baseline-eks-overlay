@@ -24,16 +24,16 @@ Set the value of "--client-cert-auth" to "true" for the etcd.'
   tag 'documentable'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane etcd must enable client authentication to secure service' do
-  it <<~JUSTIFICATION do
-    is not a finding because the --client-cert-auth flag
-    is configured by the Kubernetes control plane managed by EKS.
-    AWS is responsible for enforcing TLS client authentication for control-plane components.
-    See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
-  JUSTIFICATION
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane etcd must enable client authentication to secure service' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --client-cert-auth flag
+      is configured by the Kubernetes control plane managed by EKS.
+      AWS is responsible for enforcing TLS client authentication for control-plane components.
+      See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

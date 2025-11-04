@@ -19,6 +19,7 @@ If any user pods are present in the Kubernetes system namespaces, this is a find
   tag 'documentable'
   tag cci: ['CCI-001082']
   tag nist: ['SC-2']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

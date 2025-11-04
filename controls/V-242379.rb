@@ -22,16 +22,16 @@ Set the value of "--auto-tls" to "false".'
   tag 'documentable'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane etcd must use TLS' do
-  it <<~JUSTIFICATION do
-    is not a finding because the --auto-tls flag
-    is configured by the Kubernetes control plane managed by EKS.
-    AWS requires TLS 1.2 as a minimum when using FIPS endpoints and recommends TLS 1.3.
-    See https://docs.aws.amazon.com/general/latest/gr/rande.html#FIPS-endpoints
-  JUSTIFICATION
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane etcd must use TLS' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --auto-tls flag
+      is configured by the Kubernetes control plane managed by EKS.
+      AWS requires TLS 1.2 as a minimum when using FIPS endpoints and recommends TLS 1.3.
+      See https://docs.aws.amazon.com/general/latest/gr/rande.html#FIPS-endpoints
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

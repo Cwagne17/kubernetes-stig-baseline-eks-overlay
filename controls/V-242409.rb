@@ -17,15 +17,15 @@ If the setting "profiling" is not configured in the Kubernetes Controller Manage
   tag 'documentable'
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane controller manager must disable profiling' do
-  it <<~JUSTIFICATION do
-    is not a finding because the --profiling flag
-    is configured by the Kubernetes control plane managed by EKS.
-    See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
-  JUSTIFICATION
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane controller manager must disable profiling' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --profiling flag
+      is configured by the Kubernetes control plane managed by EKS.
+      See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

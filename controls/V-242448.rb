@@ -23,12 +23,12 @@ chown root:root <location from kubeconfig>.'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
   # TODO: Kube-proxy may be managed as an Amazon EKS add-on. If kube-proxy is an
   # EKS-managed add-on, this control should assert the add-on state via the AWS EKS API
   # (i.e., validate the add-on is present and configured per the control). If kube-proxy
   # is self-hosted on nodes (DaemonSet), this control should perform node-level checks
   # (e.g., locate the kube-proxy kubeconfig and validate ownership and permissions).
   # No executable logic implemented yet.
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

@@ -24,7 +24,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
 
   kubelet_config_path = input('kubelet_config_path')
 
@@ -44,5 +44,5 @@ systemctl daemon-reload && systemctl restart kubelet'
     end
   end
 
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

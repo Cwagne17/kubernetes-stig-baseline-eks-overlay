@@ -18,6 +18,7 @@ If the Control Plane or any Worker nodes are not using kubectl version 1.12.9 or
   tag 'documentable'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

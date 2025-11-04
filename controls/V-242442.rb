@@ -24,6 +24,7 @@ kubectl delete pod podname
   tag 'documentable'
   tag cci: ['CCI-002647']
   tag nist: ['SI-4 d']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

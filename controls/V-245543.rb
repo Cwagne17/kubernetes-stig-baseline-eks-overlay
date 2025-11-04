@@ -19,17 +19,17 @@ Remove the setting "--token-auth-file".'
   tag 'documentable'
   tag cci: ['CCI-002448']
   tag nist: ['SC-12 (3)']
-# --- BEGIN CUSTOM CODE ---
-describe 'Control-plane API server must disable token authentication to protect information in transit' do
-  it <<~JUSTIFICATION do
-    is not a finding because the --token-auth-file flag
-    is configured by the Kubernetes control plane managed by EKS.
-    Amazon EKS uses webhook token authentication, service account tokens, and OIDC;
-    customers cannot enable static token file authentication.
-    See https://docs.aws.amazon.com/eks/latest/best-practices/identity-and-access-management.html
-  JUSTIFICATION
-    expect(true).to eq true
+  # --- BEGIN CUSTOM CODE ---
+  describe 'Control-plane API server must disable token authentication to protect information in transit' do
+    it <<~JUSTIFICATION do
+      is not a finding because the --token-auth-file flag
+      is configured by the Kubernetes control plane managed by EKS.
+      Amazon EKS uses webhook token authentication, service account tokens, and OIDC;
+      customers cannot enable static token file authentication.
+      See https://docs.aws.amazon.com/eks/latest/best-practices/identity-and-access-management.html
+    JUSTIFICATION
+      expect(true).to eq true
+    end
   end
-end
-# --- END CUSTOM CODE ---
+  # --- END CUSTOM CODE ---
 end

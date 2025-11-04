@@ -21,6 +21,7 @@ Note: If the API server is running as a Pod, then the manifest will also need to
   tag 'documentable'
   tag cci: ['CCI-001464']
   tag nist: ['AU-14 (1)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

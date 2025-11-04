@@ -27,6 +27,7 @@ Note: Kubernetes Skew Policy can be found at: https://kubernetes.io/docs/setup/r
   tag 'documentable'
   tag cci: ['CCI-002635']
   tag nist: ['SI-3 (10) (a)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

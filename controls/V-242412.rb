@@ -41,6 +41,7 @@ Update Kubernetes Controller manifest and namespace PPS configuration to comply 
   tag 'documentable'
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

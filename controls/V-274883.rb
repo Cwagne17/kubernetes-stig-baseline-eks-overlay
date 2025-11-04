@@ -21,6 +21,7 @@ If any sensitive information is found, this is a finding.'
   tag 'documentable'
   tag cci: ['CCI-004062']
   tag nist: ['IA-5 (1) (d)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

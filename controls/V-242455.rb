@@ -25,7 +25,7 @@ chmod 644 <kubeadm.conf path>'
   tag 'documentable'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
-  # --- Begin Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
 
   kubeadm_conf_path = input('kubeadm_conf_path')
 
@@ -39,5 +39,5 @@ chmod 644 <kubeadm.conf path>'
     it { should_not be_more_permissive_than('0644') }
   end
 
-  # --- End Custom Code ---
+  # --- END CUSTOM CODE ---
 end

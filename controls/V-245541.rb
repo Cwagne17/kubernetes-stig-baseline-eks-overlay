@@ -38,6 +38,7 @@ Set the argument "streamingConnectionIdleTimeout" to a value of "5m".'
   tag 'documentable'
   tag cci: ['CCI-001133']
   tag nist: ['SC-10']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

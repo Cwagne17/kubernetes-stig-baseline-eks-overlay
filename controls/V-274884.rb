@@ -21,6 +21,7 @@ If Secrets are attached to applications without a documented requirement, this i
   tag 'documentable'
   tag cci: ['CCI-002476']
   tag nist: ['SC-28 (1)']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end

@@ -28,6 +28,7 @@ All the manifest files should now have privileges of "644".'
   tag 'documentable'
   tag cci: ['CCI-001499', 'CCI-000366']
   tag nist: ['CM-5 (6)', 'CM-6 b']
-# --- Begin Custom Code ---
-# --- End Custom Code ---
+  # --- BEGIN CUSTOM CODE ---
+  # TODO: Control not yet implemented.
+  # --- END CUSTOM CODE ---
 end
