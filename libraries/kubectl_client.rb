@@ -36,6 +36,26 @@ class KubectlClient < Inspec.resource(1)
     @result.exit_status == 0
   end
 
+  def connectivity_error?
+    # Check for common kubectl connectivity error patterns
+    stderr.include?('Unable to connect to the server') ||
+      stderr.include?('connection refused') ||
+      stderr.include?('no such host') ||
+      stderr.include?('dial tcp') ||
+      stderr.include?('context deadline exceeded') ||
+      stderr.include?('i/o timeout')
+  end
+
+  def error_message
+    return nil if success?
+    
+    if connectivity_error?
+      'Unable to connect to Kubernetes cluster. Verify cluster access and kubeconfig.'
+    else
+      stderr.strip
+    end
+  end
+
   def json
     begin
       require 'json'

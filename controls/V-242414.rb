@@ -28,7 +28,60 @@ If any host-privileged ports are returned for any of the pods, this is a finding
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Kubernetes API
+
+  # Privileged ports are < 1024
+  privileged_port_threshold = 1024
+  system_namespaces = ['kube-system', 'kube-node-lease', 'kube-public']
+  
+  pods_cmd = kubectl_client('get pods --all-namespaces -o json')
+  
+  if pods_cmd.success? && pods_cmd.json
+    all_pods = pods_cmd.json['items'] || []
+    
+    # Filter to user namespaces only
+    user_pods = all_pods.reject { |p| system_namespaces.include?(p.dig('metadata', 'namespace')) }
+    
+    pods_with_privileged_ports = []
+    
+    user_pods.each do |pod|
+      pod_name = pod.dig('metadata', 'name')
+      pod_namespace = pod.dig('metadata', 'namespace')
+      containers = pod.dig('spec', 'containers') || []
+      
+      containers.each do |container|
+        ports = container['ports'] || []
+        
+        privileged_ports = ports.select do |port|
+          (port['containerPort'] || 0) < privileged_port_threshold ||
+          (port['hostPort'] && port['hostPort'] < privileged_port_threshold)
+        end
+        
+        if privileged_ports.any?
+          pods_with_privileged_ports << {
+            pod: pod_name,
+            namespace: pod_namespace,
+            container: container['name'],
+            ports: privileged_ports
+          }
+        end
+      end
+    end
+    
+    describe 'User pods using privileged host ports' do
+      it 'should not use ports below 1024' do
+        expect(pods_with_privileged_ports).to be_empty, <<~MSG
+          Found #{pods_with_privileged_ports.length} pod(s) using privileged host ports (< 1024) in user namespaces.
+          Containers should use non-privileged ports (>= 1024).
+          
+          Pods with privileged ports:
+          #{pods_with_privileged_ports.map { |p| 
+            "  - Pod: #{p[:pod]} (namespace: #{p[:namespace]}, container: #{p[:container]})\n" +
+            "    Ports: #{p[:ports].map { |port| port['containerPort'] || port['hostPort'] }.join(', ')}"
+          }.join("\n")}
+        MSG
+      end
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

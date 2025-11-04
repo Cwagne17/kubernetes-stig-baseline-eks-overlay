@@ -21,7 +21,25 @@ kubectl delete deployment kubernetes-dashboard --namespace=kube-system'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Kubernetes API
+
+  # Check for Kubernetes dashboard pods
+  dashboard_cmd = kubectl_client('get pods --all-namespaces -l k8s-app=kubernetes-dashboard -o json')
+  
+  if dashboard_cmd.success? && dashboard_cmd.json
+    dashboard_pods = dashboard_cmd.json['items'] || []
+    
+    describe 'Kubernetes dashboard' do
+      it 'should not be enabled' do
+        expect(dashboard_pods).to be_empty, <<~MSG
+          Found #{dashboard_pods.length} Kubernetes dashboard pod(s) running.
+          The dashboard should be removed unless absolutely required.
+          
+          Dashboard pods:
+          #{dashboard_pods.map { |p| "  - #{p.dig('metadata', 'name')} in namespace #{p.dig('metadata', 'namespace')}" }.join("\n")}
+        MSG
+      end
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

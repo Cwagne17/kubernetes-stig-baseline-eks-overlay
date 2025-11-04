@@ -22,7 +22,19 @@ If any sensitive information is found, this is a finding.'
   tag cci: ['CCI-004062']
   tag nist: ['IA-5 (1) (d)']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Kubernetes API
+
+  # Get all resources and ConfigMaps for manual review
+  resources_cmd = kubectl_client('get all,cm -A -o json')
+  
+  describe 'Sensitive information storage' do
+    skip <<~MSG
+      Manual review required: Check all resources and ConfigMaps for sensitive information
+      (passwords, keys, tokens, credentials, connection strings).
+      
+      Cluster resources query result:
+      #{resources_cmd.success? ? resources_cmd.stdout : "Unable to retrieve resources: #{resources_cmd.error_message}"}
+    MSG
+  end
+
   # --- END CUSTOM CODE ---
 end

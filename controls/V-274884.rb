@@ -22,7 +22,26 @@ If Secrets are attached to applications without a documented requirement, this i
   tag cci: ['CCI-002476']
   tag nist: ['SC-28 (1)']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Kubernetes API
+
+  # Get RBAC roles and workloads for manual review
+  roles_cmd = kubectl_client('get roles,clusterroles -A -o json')
+  bindings_cmd = kubectl_client('get rolebindings,clusterrolebindings -A -o json')
+  workloads_cmd = kubectl_client('get all -A -o json')
+  
+  describe 'Kubernetes RBAC Secret access' do
+    skip <<~MSG
+      Manual review required: Verify all Secret access is limited to documented organizational requirements.
+      
+      Roles and ClusterRoles:
+      #{roles_cmd.success? ? roles_cmd.stdout : "Unable to retrieve: #{roles_cmd.error_message}"}
+      
+      RoleBindings and ClusterRoleBindings:
+      #{bindings_cmd.success? ? bindings_cmd.stdout : "Unable to retrieve: #{bindings_cmd.error_message}"}
+      
+      Workload resources:
+      #{workloads_cmd.success? ? workloads_cmd.stdout : "Unable to retrieve: #{workloads_cmd.error_message}"}
+    MSG
+  end
+
   # --- END CUSTOM CODE ---
 end

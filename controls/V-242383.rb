@@ -38,7 +38,36 @@ If a return value is returned from the "kubectl get all" command and it is not t
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Kubernetes API
+
+  # System namespaces that should not contain user-managed resources
+  system_namespaces = ['default', 'kube-public', 'kube-node-lease']
+  
+  system_namespaces.each do |ns|
+    # Get all resources in the namespace
+    resources_cmd = kubectl_client("get all -n #{ns} -o json")
+    
+    if resources_cmd.success? && resources_cmd.json
+      items = resources_cmd.json['items'] || []
+      
+      # Filter out the default kubernetes service
+      user_resources = items.reject do |item|
+        item.dig('metadata', 'name') == 'kubernetes' && 
+        item['kind'] == 'Service'
+      end
+      
+      describe "Namespace '#{ns}'" do
+        it 'should not contain user-managed resources' do
+          expect(user_resources).to be_empty, <<~MSG
+            Found #{user_resources.length} user-managed resource(s) in system namespace '#{ns}'.
+            User-managed resources must be in dedicated user namespaces.
+            
+            Resources found:
+            #{user_resources.map { |r| "  - #{r['kind']}/#{r.dig('metadata', 'name')}" }.join("\n")}
+          MSG
+        end
+      end
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

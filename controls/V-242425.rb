@@ -54,15 +54,7 @@ systemctl daemon-reload && systemctl restart kubelet'
       certificate generation and rotation for kubelet serving certificates. This eliminates
       the need for static tlsPrivateKeyFile and tlsCertFile configuration.
       
-      The kubelet automatically:
-      - Requests a serving certificate from the Kubernetes CA
-      - Uses the certificate for secure communication with the API Server
-      - Rotates certificates before expiration
-      
       Current kubelet configuration shows serverTLSBootstrap: #{kubelet.get_config_value('serverTLSBootstrap')}
-      
-      This approach is more secure than static certificate files as it enables automatic
-      rotation and reduces the risk of expired certificates.
       
       See: https://kubernetes.io/docs/reference/access-authn-authz/kubelet-tls-bootstrapping/
     JUSTIFICATION

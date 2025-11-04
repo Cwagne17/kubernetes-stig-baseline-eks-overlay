@@ -81,7 +81,53 @@ If any of the values returned reference environment variables, this is a finding
   tag cci: ['CCI-004062', 'CCI-000196']
   tag nist: ['IA-5 (1) (d)', 'IA-5 (1) (c)']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
-  # Kubernetes API
+
+  # Get all pods and check for secrets in environment variables
+  pods_cmd = kubectl_client('get pods --all-namespaces -o json')
+  
+  if pods_cmd.success? && pods_cmd.json
+    all_pods = pods_cmd.json['items'] || []
+    
+    pods_with_secrets = []
+    all_pods.each do |pod|
+      pod_name = pod.dig('metadata', 'name')
+      pod_namespace = pod.dig('metadata', 'namespace')
+      containers = pod.dig('spec', 'containers') || []
+      
+      containers.each do |container|
+        env_vars = container['env'] || []
+        env_from = container['envFrom'] || []
+        
+        has_secret_env = env_vars.any? do |env|
+          env.key?('valueFrom') && env['valueFrom'].key?('secretKeyRef')
+        end
+        
+        has_secret_env_from = env_from.any? { |ef| ef.key?('secretRef') }
+        
+        if has_secret_env || has_secret_env_from
+          pods_with_secrets << {
+            name: pod_name,
+            namespace: pod_namespace,
+            container: container['name']
+          }
+        end
+      end
+    end
+  end
+  
+  describe 'Secrets stored as environment variables' do
+    if pods_cmd.success? && pods_cmd.json
+      it 'should not be used in any pods' do
+        expect(pods_with_secrets).to be_empty, <<~MSG
+          Found #{pods_with_secrets.length} pod(s) using Secrets as environment variables.
+          Secrets should be mounted as files, not environment variables.
+          
+          Pods with secret environment variables:
+          #{pods_with_secrets.map { |p| "  - Pod: #{p[:name]} (namespace: #{p[:namespace]}, container: #{p[:container]})" }.join("\n")}
+        MSG
+      end
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end
