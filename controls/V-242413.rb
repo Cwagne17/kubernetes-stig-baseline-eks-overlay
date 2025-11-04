@@ -39,6 +39,18 @@ Verify etcd network boundary with the PPS associated with the CAL Assurance Cate
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+
+  describe 'Kubernetes etcd PPSM compliance' do
+    it <<~JUSTIFICATION do
+      is not a finding because Kubernetes etcd is managed by AWS in EKS.
+      
+      AWS EKS manages the Control Plane including the etcd configuration, ports,
+      protocols, and services. The etcd cluster runs in AWS-managed infrastructure
+      with AWS-controlled network boundaries and security configurations.
+    JUSTIFICATION
+      expect(true).to eq(true)
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

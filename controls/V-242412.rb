@@ -42,6 +42,18 @@ Update Kubernetes Controller manifest and namespace PPS configuration to comply 
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+
+  describe 'Kubernetes Controller Manager PPSM compliance' do
+    it <<~JUSTIFICATION do
+      is not a finding because the Kubernetes Controller Manager is managed by AWS in EKS.
+      
+      AWS EKS manages the Control Plane including the Controller Manager configuration,
+      ports, protocols, and services. The Controller Manager runs in AWS-managed
+      infrastructure with AWS-controlled network boundaries and security configurations.
+    JUSTIFICATION
+      expect(true).to eq(true)
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

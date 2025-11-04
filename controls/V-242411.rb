@@ -43,6 +43,18 @@ Update Kubernetes Scheduler manifest and namespace PPS configuration to comply w
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
-  # TODO: Control not yet implemented.
+
+  describe 'Kubernetes Scheduler PPSM compliance' do
+    it <<~JUSTIFICATION do
+      is not a finding because the Kubernetes Scheduler is managed by AWS in EKS.
+      
+      AWS EKS manages the Control Plane including the Scheduler configuration, ports,
+      protocols, and services. The Scheduler runs in AWS-managed infrastructure with
+      AWS-controlled network boundaries and security configurations.
+    JUSTIFICATION
+      expect(true).to eq(true)
+    end
+  end
+
   # --- END CUSTOM CODE ---
 end

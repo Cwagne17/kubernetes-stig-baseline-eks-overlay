@@ -147,4 +147,9 @@ class AwsEksCluster < Inspec.resource(1)
     return nil unless exists?
     @cluster.resources_vpc_config&.endpoint_private_access
   end
+
+  def public_access_cidrs
+    return [] unless exists?
+    @cluster.resources_vpc_config&.public_access_cidrs || []
+  end
 end
