@@ -28,6 +28,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   # EKS Context: Amazon EKS-optimized AMIs use --hostname-override by default
   # to set the node name to match the EC2 instance's private DNS name.

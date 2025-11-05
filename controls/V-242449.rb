@@ -43,6 +43,7 @@ chmod 644 <path_to_client_ca_file>'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   kubelet_ca_file_path = input('kubelet_ca_file_path')
 
@@ -50,6 +51,5 @@ chmod 644 <path_to_client_ca_file>'
     it { should exist }
     it { should_not be_more_permissive_than('0644') }
   end
-
   # --- END CUSTOM CODE ---
 end

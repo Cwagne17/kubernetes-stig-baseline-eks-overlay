@@ -20,6 +20,7 @@ Set the value of "--audit-log-maxsize" to a minimum of "100".'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Audit logs are sent to CloudWatch Logs, not stored as files with size limits.
   # CloudWatch Logs provides scalable, managed log storage with configurable retention.
@@ -38,6 +39,5 @@ Set the value of "--audit-log-maxsize" to a minimum of "100".'
       MSG
     end
   end
-
   # --- END CUSTOM CODE ---
 end

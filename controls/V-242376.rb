@@ -21,6 +21,8 @@ If the setting "tls-min-version" is not configured in the Kubernetes Controller 
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane controller manager must use TLS 1.2, at a minimum' do
     it <<~JUSTIFICATION do
       is not a finding because the --tls-min-version flag

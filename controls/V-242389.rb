@@ -23,6 +23,8 @@ Set the value of "--secure-port" to a value greater than "0".'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server must have the secure port set' do
     it <<~JUSTIFICATION do
       is not a finding because the --secure-port flag

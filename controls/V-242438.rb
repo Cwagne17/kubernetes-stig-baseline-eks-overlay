@@ -22,6 +22,8 @@ Set the value of "--request-timeout" greater than "0".'
   tag cci: ['CCI-002415']
   tag nist: ['SC-7 (21)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server must configure timeouts to limit attack surface' do
     it <<~JUSTIFICATION do
       is not a finding because the --request-timeout flag

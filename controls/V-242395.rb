@@ -21,6 +21,7 @@ kubectl delete deployment kubernetes-dashboard --namespace=kube-system'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # Check for Kubernetes dashboard pods
   dashboard_cmd = kubectl_client('get pods --all-namespaces -l k8s-app=kubernetes-dashboard -o json')

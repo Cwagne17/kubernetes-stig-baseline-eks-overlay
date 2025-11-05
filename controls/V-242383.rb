@@ -38,6 +38,7 @@ If a return value is returned from the "kubectl get all" command and it is not t
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # System namespaces that should not contain user-managed resources
   system_namespaces = ['default', 'kube-public', 'kube-node-lease']

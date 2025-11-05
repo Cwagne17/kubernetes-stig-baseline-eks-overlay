@@ -40,6 +40,8 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Kubelet must have the SSL Certificate Authority set' do
     it <<~JUSTIFICATION do
       is not a finding because the cluster certificate authority

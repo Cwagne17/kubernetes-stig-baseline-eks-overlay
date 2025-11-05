@@ -26,6 +26,8 @@ Note: It is best to implement policies first and then enable the webhook, otherw
   tag cci: ['CCI-002263']
   tag nist: ['AC-16 a']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server must have the ValidatingAdmissionWebhook enabled' do
     it <<~JUSTIFICATION do
       is not a finding because the --enable-admission-plugins flag

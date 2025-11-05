@@ -23,6 +23,8 @@ Set the value of "--auto-tls" to "false".'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane etcd must use TLS' do
     it <<~JUSTIFICATION do
       is not a finding because the --auto-tls flag

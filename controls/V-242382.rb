@@ -25,6 +25,8 @@ Set the value of "--authorization-mode" to "Node,RBAC".'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server must enable Node,RBAC as the authorization mode' do
     it <<~JUSTIFICATION do
       is not a finding because the --authorization-mode flag

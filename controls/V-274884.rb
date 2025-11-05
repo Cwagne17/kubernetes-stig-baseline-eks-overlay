@@ -22,6 +22,7 @@ If Secrets are attached to applications without a documented requirement, this i
   tag cci: ['CCI-002476']
   tag nist: ['SC-28 (1)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # Get RBAC roles and workloads for manual review
   roles_cmd = kubectl_client('get roles,clusterroles -A -o json')
@@ -42,6 +43,5 @@ If Secrets are attached to applications without a documented requirement, this i
       #{workloads_cmd.success? ? workloads_cmd.stdout : "Unable to retrieve: #{workloads_cmd.error_message}"}
     MSG
   end
-
   # --- END CUSTOM CODE ---
 end

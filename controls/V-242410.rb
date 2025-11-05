@@ -43,6 +43,7 @@ Update Kubernetes API Server manifest and namespace PPS configuration to comply 
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   cluster_name = input('cluster_name')
   eks_cluster = aws_eks_cluster(cluster_name)

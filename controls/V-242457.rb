@@ -21,6 +21,7 @@ chown root:root /var/lib/kubelet/config.yaml'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   kubelet_config_path = input('kubelet_config_path')
 
@@ -29,6 +30,5 @@ chown root:root /var/lib/kubelet/config.yaml'
     its('owner') { should cmp 'root' }
     its('group') { should cmp 'root' }
   end
-
   # --- END CUSTOM CODE ---
 end

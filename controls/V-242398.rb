@@ -48,6 +48,7 @@ service kubelet restart)
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
   
   # EKS Context: This check applies to Worker Nodes only.
   # EKS-managed Control Plane nodes are not accessible for direct inspection.

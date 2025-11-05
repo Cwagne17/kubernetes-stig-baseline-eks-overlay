@@ -28,6 +28,7 @@ Note: Kubernetes Skew Policy can be found at: https://kubernetes.io/docs/setup/r
   tag cci: ['CCI-002635']
   tag nist: ['SI-3 (10) (a)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Cluster version is managed by AWS and can be queried via EKS API.
   # Manual review required to verify version is current per IAVM/CTO/DTM/STIG guidance.
@@ -49,6 +50,5 @@ Note: Kubernetes Skew Policy can be found at: https://kubernetes.io/docs/setup/r
       MSG
     end
   end
-
   # --- END CUSTOM CODE ---
 end

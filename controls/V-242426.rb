@@ -24,6 +24,8 @@ Set the value of "--peer-client-cert-auth" to "true" for the etcd.'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane etcd must enable client authentication to secure service' do
     it <<~JUSTIFICATION do
       is not a finding because the --peer-client-cert-auth flag

@@ -25,6 +25,8 @@ Set the value of  "--anonymous-auth" to "false".'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server must have anonymous authentication disabled' do
     it <<~JUSTIFICATION do
       is not a finding because the --anonymous-auth flag

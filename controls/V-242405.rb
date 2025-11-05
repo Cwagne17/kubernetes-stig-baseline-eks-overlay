@@ -26,6 +26,8 @@ All the manifest files should be owned by root:root.'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'manifests must be owned by root' do
     it <<~JUSTIFICATION do
       is not a finding because control-plane manifests under /etc/kubernetes/manifests

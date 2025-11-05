@@ -18,6 +18,8 @@ If "basic-auth-file" is set in the Kubernetes API server manifest file this is a
   tag cci: ['CCI-002448']
   tag nist: ['SC-12 (3)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server must disable basic authentication to protect information in transit' do
     it <<~JUSTIFICATION do
       is not a finding because the --basic-auth-file flag

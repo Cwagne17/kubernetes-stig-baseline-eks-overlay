@@ -40,6 +40,7 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   # EKS Context: Kubelet TLS configuration is managed by AWS using serverTLSBootstrap.
   # EKS automatically configures kubelet with serverTLSBootstrap enabled, which allows
@@ -61,6 +62,5 @@ systemctl daemon-reload && systemctl restart kubelet'
       expect(kubelet.get_config_value('serverTLSBootstrap')).to eq(true)
     end
   end
-
   # --- END CUSTOM CODE ---
 end

@@ -18,6 +18,8 @@ If the setting "profiling" is not configured in the Kubernetes Controller Manage
   tag cci: ['CCI-000381']
   tag nist: ['CM-7 a']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane controller manager must disable profiling' do
     it <<~JUSTIFICATION do
       is not a finding because the --profiling flag

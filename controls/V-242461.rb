@@ -18,6 +18,7 @@ If the setting "audit-policy-file" is not set or is found in the Kubernetes API 
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Audit logging in EKS is configured to send logs to CloudWatch Logs.
   # The audit-policy-file setting is AWS-managed and not directly accessible.
@@ -41,6 +42,5 @@ If the setting "audit-policy-file" is not set or is found in the Kubernetes API 
       MSG
     end
   end
-
   # --- END CUSTOM CODE ---
 end

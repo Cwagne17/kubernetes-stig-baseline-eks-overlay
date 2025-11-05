@@ -24,6 +24,7 @@ chown root:root <location from kubeconfig>.'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   # EKS Context: Kube-proxy is managed as an EKS add-on or self-managed DaemonSet.
   # When managed as an add-on, AWS handles the configuration and security of kube-proxy.
@@ -71,6 +72,5 @@ chown root:root <location from kubeconfig>.'
       end
     end
   end
-
   # --- END CUSTOM CODE ---
 end

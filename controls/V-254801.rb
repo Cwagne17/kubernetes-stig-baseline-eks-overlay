@@ -50,6 +50,7 @@ systemctl daemon-reload && systemctl restart kubelet)
   tag cci: ['CCI-002263']
   tag nist: ['AC-16 a']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
   
   # EKS Context: This check applies to Worker Nodes only.
   # EKS-managed Control Plane nodes are not accessible for direct inspection.

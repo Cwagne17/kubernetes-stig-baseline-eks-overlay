@@ -89,6 +89,8 @@ kubectl create -f restricted.yml"
   tag cci: ['CCI-002263']
   tag nist: ['AC-16 a']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Kubernetes Pod Security Policies have been deprecated as of version 1.21 and removed in version 1.25.' do
     it <<~JUSTIFICATION do
       is not a finding because Pod Security Policies

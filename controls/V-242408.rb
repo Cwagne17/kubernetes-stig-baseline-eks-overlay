@@ -29,6 +29,7 @@ All the manifest files should now have privileges of "644".'
   tag cci: ['CCI-001499', 'CCI-000366']
   tag nist: ['CM-5 (6)', 'CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   # EKS Context: This check applies to both Control Plane and Worker Nodes.
   # On EKS Worker Nodes, the /etc/kubernetes/manifests directory typically does not exist

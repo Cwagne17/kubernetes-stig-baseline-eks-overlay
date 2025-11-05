@@ -21,6 +21,8 @@ find /etc/kubernetes/pki -name "*.key" | xargs chmod 600'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'PKI keys must have file permissions set to 600 or more restrictive' do
     it <<~JUSTIFICATION do
       is not a finding because PKI key file permissions under /etc/kubernetes/pki

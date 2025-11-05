@@ -39,6 +39,7 @@ Verify etcd network boundary with the PPS associated with the CAL Assurance Cate
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   describe 'Kubernetes etcd PPSM compliance' do
     it <<~JUSTIFICATION do
@@ -51,6 +52,5 @@ Verify etcd network boundary with the PPS associated with the CAL Assurance Cate
       expect(true).to eq(true)
     end
   end
-
   # --- END CUSTOM CODE ---
 end

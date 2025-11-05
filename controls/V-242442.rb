@@ -25,6 +25,7 @@ kubectl delete pod podname
   tag cci: ['CCI-002647']
   tag nist: ['SI-4 d']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # Get all pod images across all namespaces
   pods_cmd = kubectl_client('get pods --all-namespaces -o json')
@@ -72,6 +73,5 @@ kubectl delete pod podname
       end
     end
   end
-
   # --- END CUSTOM CODE ---
 end

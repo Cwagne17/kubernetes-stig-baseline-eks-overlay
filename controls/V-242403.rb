@@ -49,6 +49,7 @@ Note: If the API server is running as a Pod, then the manifest will also need to
   tag cci: ['CCI-000018', 'CCI-000130', 'CCI-000131', 'CCI-000132', 'CCI-000133', 'CCI-000134', 'CCI-000135', 'CCI-000172', 'CCI-001403', 'CCI-001404', 'CCI-001487', 'CCI-002264']
   tag nist: ['AC-2 (4)', 'AU-3 a', 'AU-3 b', 'AU-3 c', 'AU-3 d', 'AU-3 e', 'AU-3 (1)', 'AU-12 c', 'AC-2 (4)', 'AC-2 (4)', 'AU-3 f', 'AC-16 a']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: The audit policy file is managed by AWS and cannot be modified by customers.
   # EKS uses a comprehensive audit policy that logs at the Metadata level by default.
@@ -59,14 +60,6 @@ Note: If the API server is running as a Pod, then the manifest will also need to
 
   describe 'Kubernetes API Server audit logging' do
     it 'should have EKS cluster audit logs enabled to send to CloudWatch' do
-      # Not a finding when enabled - audit policy is AWS-managed
-      # EKS automatically configures audit logging with an AWS-managed audit policy.
-      # The audit policy logs Kubernetes API requests at the Metadata level, including:
-      # - Request metadata (user, timestamp, resource, verb)
-      # - Source IPs and user agents  
-      # - Response status codes
-      # Current enabled log types: #{eks_cluster.enabled_log_types.inspect}
-      
       expect(eks_cluster.audit_logging_enabled?).to eq(true), <<~MSG
         EKS cluster audit logging is not enabled for cluster #{cluster_name}.
       

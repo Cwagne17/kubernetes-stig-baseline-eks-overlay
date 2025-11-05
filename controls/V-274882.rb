@@ -54,6 +54,7 @@ The encryption config must specify the Secret's resource and provider. Below is 
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Secrets encryption in EKS uses AWS KMS for envelope encryption.
   # The encryption-provider-config is managed by AWS when envelope encryption is enabled.
@@ -73,6 +74,5 @@ The encryption config must specify the Secret's resource and provider. Below is 
       MSG
     end
   end
-
   # --- END CUSTOM CODE ---
 end

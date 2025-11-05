@@ -43,6 +43,7 @@ Update Kubernetes Scheduler manifest and namespace PPS configuration to comply w
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   describe 'Kubernetes Scheduler PPSM compliance' do
     it <<~JUSTIFICATION do

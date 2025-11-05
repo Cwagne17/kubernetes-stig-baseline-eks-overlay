@@ -42,6 +42,7 @@ Update Kubernetes Controller manifest and namespace PPS configuration to comply 
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   describe 'Kubernetes Controller Manager PPSM compliance' do
     it <<~JUSTIFICATION do
@@ -54,6 +55,5 @@ Update Kubernetes Controller manifest and namespace PPS configuration to comply 
       expect(true).to eq(true)
     end
   end
-
   # --- END CUSTOM CODE ---
 end

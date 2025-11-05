@@ -66,6 +66,7 @@ d. Restart the kubelet service using the following command:
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   # EKS Context: This check applies to Worker Nodes only.
   # Static pods should not be used on Worker Nodes as they bypass API Server admission control.

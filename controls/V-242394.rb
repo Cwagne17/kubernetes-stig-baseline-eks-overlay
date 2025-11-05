@@ -25,6 +25,7 @@ Note: If access to the worker node is through an SSH session, it is important to
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   describe service('sshd') do
     it 'must not be enabled' do

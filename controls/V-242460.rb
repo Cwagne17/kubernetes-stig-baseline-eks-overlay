@@ -25,6 +25,8 @@ chmod 644 /etc/kubernetes/controller-manager.conf'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'admin kubeconfig must have file permissions set to 644 or more restrictive' do
     it <<~JUSTIFICATION do
       is not a finding because kubeconfig file permissions under /etc/kubernetes

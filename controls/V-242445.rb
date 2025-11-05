@@ -21,6 +21,8 @@ chown etcd:etcd /var/lib/etcd/*'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'component etcd must be owned by etcd' do
     it <<~JUSTIFICATION do
       is not a finding because etcd data and configuration file ownership

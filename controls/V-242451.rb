@@ -21,6 +21,8 @@ chown -R root:root /etc/kubernetes/pki/'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'component PKI must be owned by root' do
     it <<~JUSTIFICATION do
       is not a finding because the /etc/kubernetes/pki directory and its contents

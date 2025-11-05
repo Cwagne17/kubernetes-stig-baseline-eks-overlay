@@ -23,6 +23,8 @@ Remove the value of "--insecure-bind-address" setting.'
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server must have the insecure bind address not set' do
     it <<~JUSTIFICATION do
       is not a finding because the --insecure-bind-address and --insecure-bind-port flags

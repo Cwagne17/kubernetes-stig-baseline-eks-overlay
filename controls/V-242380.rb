@@ -23,6 +23,8 @@ Set the value of "--peer-auto-tls" to "false".'
   tag cci: ['CCI-000068']
   tag nist: ['AC-17 (2)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination' do
     it <<~JUSTIFICATION do
       is not a finding because the --peer-auto-tls flag

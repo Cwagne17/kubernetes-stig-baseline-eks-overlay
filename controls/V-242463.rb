@@ -18,6 +18,7 @@ If the setting "audit-log-maxbackup" is not set in the Kubernetes API Server man
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Audit logs are sent to CloudWatch Logs, not stored as files with backup rotation.
   # CloudWatch Logs provides managed log storage with configurable retention policies.
@@ -32,6 +33,5 @@ If the setting "audit-log-maxbackup" is not set in the Kubernetes API Server man
       MSG
     end
   end
-
   # --- END CUSTOM CODE ---
 end

@@ -31,6 +31,7 @@ The kubelet file should now be owned by root:root.'
   tag cci: ['CCI-001499']
   tag nist: ['CM-5 (6)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   kubelet_config_path = input('kubelet_config_path')
 

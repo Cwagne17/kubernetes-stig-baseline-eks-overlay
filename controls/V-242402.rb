@@ -22,6 +22,7 @@ Note: If the API server is running as a Pod, then the manifest will also need to
   tag cci: ['CCI-001464']
   tag nist: ['AU-14 (1)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Audit logging in EKS is configured at the cluster level via CloudWatch Logs.
   # The --audit-log-path flag is not directly accessible as the Control Plane is AWS-managed.

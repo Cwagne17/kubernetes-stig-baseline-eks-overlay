@@ -54,6 +54,7 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
   tag cci: ['CCI-002263']
   tag nist: ['AC-16 a']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Pod Security Admission is enabled by default in all supported EKS versions (1.23+).
   # The admission-control-config-file is managed by AWS and cannot be modified by customers.
@@ -84,6 +85,5 @@ Best Practice: https://kubernetes.io/docs/concepts/security/pod-security-policy/
       expect(true).to eq(true)
     end
   end
-
   # --- END CUSTOM CODE ---
 end

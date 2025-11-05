@@ -39,6 +39,7 @@ Set the argument "streamingConnectionIdleTimeout" to a value of "5m".'
   tag cci: ['CCI-001133']
   tag nist: ['SC-10']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   # EKS Context: This check applies to Worker Nodes.
   # The streamingConnectionIdleTimeout controls how long idle streaming connections
@@ -92,6 +93,5 @@ Set the argument "streamingConnectionIdleTimeout" to a value of "5m".'
       MSG
     end
   end
-
   # --- END CUSTOM CODE ---
 end

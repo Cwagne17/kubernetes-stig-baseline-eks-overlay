@@ -81,6 +81,7 @@ If any of the values returned reference environment variables, this is a finding
   tag cci: ['CCI-004062', 'CCI-000196']
   tag nist: ['IA-5 (1) (d)', 'IA-5 (1) (c)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # Get all pods and check for secrets in environment variables
   pods_cmd = kubectl_client('get pods --all-namespaces -o json')
@@ -128,6 +129,5 @@ If any of the values returned reference environment variables, this is a finding
       end
     end
   end
-
   # --- END CUSTOM CODE ---
 end

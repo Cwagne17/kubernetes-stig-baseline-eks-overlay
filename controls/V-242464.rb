@@ -18,6 +18,7 @@ If the setting "audit-log-maxage" is not set in the Kubernetes API Server manife
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Audit logs are sent to CloudWatch Logs with configurable retention policies.
   # The audit-log-maxage setting is not applicable as logs are not stored as rotating files.
@@ -32,6 +33,5 @@ If the setting "audit-log-maxage" is not set in the Kubernetes API Server manife
       MSG
     end
   end
-
   # --- END CUSTOM CODE ---
 end

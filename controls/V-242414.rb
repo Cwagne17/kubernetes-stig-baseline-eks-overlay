@@ -28,6 +28,7 @@ If any host-privileged ports are returned for any of the pods, this is a finding
   tag cci: ['CCI-000382']
   tag nist: ['CM-7 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # Privileged ports are < 1024
   privileged_port_threshold = 1024
@@ -82,6 +83,5 @@ If any host-privileged ports are returned for any of the pods, this is a finding
       end
     end
   end
-
   # --- END CUSTOM CODE ---
 end

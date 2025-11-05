@@ -36,6 +36,8 @@ systemctl daemon-reload && systemctl restart kubelet'
   tag cci: ['CCI-001084']
   tag nist: ['SC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Kubelet must enable kernel protection' do
     it <<~JUSTIFICATION do
       is not a finding because the --protect-kernel-defaults flag

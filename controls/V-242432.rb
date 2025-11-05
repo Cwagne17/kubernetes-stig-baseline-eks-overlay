@@ -24,6 +24,8 @@ Set the value of "--peer-cert-file" to the certificate to be used for communicat
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane etcd must have peer-cert-file set for secure communication' do
     it <<~JUSTIFICATION do
       is not a finding because the --peer-cert-file flag

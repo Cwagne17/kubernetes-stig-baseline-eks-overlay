@@ -18,6 +18,7 @@ If the setting audit-log-path is not set in the Kubernetes API Server manifest f
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # EKS Context: Audit logs are sent to CloudWatch Logs, not written to a file path.
   # The audit-log-path setting is AWS-managed and not directly configurable.
@@ -37,6 +38,5 @@ If the setting audit-log-path is not set in the Kubernetes API Server manifest f
       MSG
     end
   end
-
   # --- END CUSTOM CODE ---
 end

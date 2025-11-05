@@ -19,6 +19,7 @@ If the Control Plane or any Worker nodes are not using kubectl version 1.12.9 or
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   # EKS Context: kubectl is typically not installed on Worker Nodes.
   # It's installed on Control Plane nodes (managed by AWS) or administrative workstations.

@@ -19,6 +19,8 @@ If the setting "bind-address" is not set to "127.0.0.1" or is not found in the K
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane scheduler must have secure binding' do
     it <<~JUSTIFICATION do
       is not a finding because the --bind-address flag

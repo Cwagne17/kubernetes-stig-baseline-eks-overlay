@@ -26,6 +26,7 @@ chmod 644 <kubeadm.conf path>'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
 
   kubeadm_conf_path = input('kubeadm_conf_path')
 
@@ -38,6 +39,5 @@ chmod 644 <kubeadm.conf path>'
     it { should exist }
     it { should_not be_more_permissive_than('0644') }
   end
-
   # --- END CUSTOM CODE ---
 end

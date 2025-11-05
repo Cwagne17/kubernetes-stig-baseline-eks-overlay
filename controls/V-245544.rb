@@ -25,6 +25,8 @@ If the setting "--kubelet-client-key" is not configured in the Kubernetes API se
   tag cci: ['CCI-002448']
   tag nist: ['SC-12 (3)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'endpoints must use approved organizational certificate and key pair to protect information in transit' do
     it <<~JUSTIFICATION do
       is not a finding because the --kubelet-client-certificate and --kubelet-client-key flags

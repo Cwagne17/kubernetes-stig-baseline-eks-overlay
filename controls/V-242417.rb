@@ -20,6 +20,7 @@ If any user pods are present in the Kubernetes system namespaces, this is a find
   tag cci: ['CCI-001082']
   tag nist: ['SC-2']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
 
   # System namespaces that should only contain Kubernetes system components
   system_namespaces = ['kube-system', 'kube-node-lease', 'kube-public']
@@ -59,6 +60,5 @@ If any user pods are present in the Kubernetes system namespaces, this is a find
       end
     end
   end
-
   # --- END CUSTOM CODE ---
 end

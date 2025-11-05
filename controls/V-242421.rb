@@ -24,6 +24,8 @@ Set the value of "--root-ca-file" to path containing Approved Organizational Cer
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane controller manager must have the SSL Certificate Authority set' do
     it <<~JUSTIFICATION do
       is not a finding because the --root-ca-file flag

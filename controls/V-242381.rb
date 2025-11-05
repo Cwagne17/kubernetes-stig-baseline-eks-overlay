@@ -21,6 +21,8 @@ Set the value of "--use-service-account-credentials" to "true".'
   tag cci: ['CCI-000015']
   tag nist: ['AC-2 (1)']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane controller manager must create unique service accounts for each work payload' do
     it <<~JUSTIFICATION do
       is not a finding because the --use-service-account-credentials flag

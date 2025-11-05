@@ -21,6 +21,8 @@ Set the value of "--tls-cipher-suites" to:
   tag cci: ['CCI-001184']
   tag nist: ['SC-23']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server must use approved cipher suites' do
     it <<~JUSTIFICATION do
       is not a finding because the --tls-cipher-suites flag

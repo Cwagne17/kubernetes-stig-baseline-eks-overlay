@@ -28,7 +28,16 @@ inspec_version: "~> 6.0"
 
 inputs:
   - name: cluster_name
-    description: The name of the EKS cluster being audited
-    type: String
-    value: ""
+    type: string
     required: false
+    description: "EKS cluster name to audit (used by cluster-scope controls and AWS/EKS queries)."
+
+  - name: region
+    type: string
+    required: false
+    description: "AWS region of the EKS cluster (e.g., us-east-1). Required for AWS CLI/EKS queries in cluster-scope controls."
+
+  - name: run_scope
+    type: string
+    value: "cluster"
+    description: "Execution scope for this run. Use 'cluster' for cluster-wide checks (kubectl/EKS API/Control Plane) and 'node' for worker-node checks (kubelet/OS)."

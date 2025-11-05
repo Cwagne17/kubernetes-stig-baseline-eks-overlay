@@ -21,6 +21,8 @@ chown root:root /etc/kubernetes/manifests/*'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane component manifests must be owned by root' do
     it <<~JUSTIFICATION do
       is not a finding because control-plane manifest files under /etc/kubernetes/manifests

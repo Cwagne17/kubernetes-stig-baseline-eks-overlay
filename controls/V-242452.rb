@@ -21,6 +21,8 @@ chmod 644 /etc/kubernetes/kubelet.conf'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
+  only_if('node pass') { run_scope.node? }
+
 
   kubelet_kubeconfig_path = input('kubelet_kubeconfig_path')
 

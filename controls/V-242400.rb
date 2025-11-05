@@ -22,6 +22,8 @@ Set the value of "AllAlpha" to "false" or remove the setting completely. (AllAlp
   tag cci: ['CCI-000213']
   tag nist: ['AC-3']
   # --- BEGIN CUSTOM CODE ---
+  only_if('cluster pass') { run_scope.cluster? }
+
   describe 'Control-plane API server Alpha APIs configuration' do
     it <<~JUSTIFICATION do
       is not a finding because the --feature-gates setting
