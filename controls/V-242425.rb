@@ -47,19 +47,21 @@ systemctl daemon-reload && systemctl restart kubelet'
   # kubelet to automatically request and rotate its own serving certificates from the
   # Kubernetes CA without requiring static tlsCertFile configuration.
   
+  server_tls_bootstrap = kubelet.get_config_value('serverTLSBootstrap')
+  
   describe 'Kubelet TLS certificate configuration' do
-    it <<~JUSTIFICATION do
-      is not a finding because EKS manages kubelet TLS certificates using serverTLSBootstrap.
+    it 'is not a finding because EKS manages kubelet TLS certificates using serverTLSBootstrap' do
+      message = <<~MSG
+        EKS kubelet is configured with serverTLSBootstrap enabled, which provides automatic
+        certificate generation and rotation for kubelet serving certificates. This eliminates
+        the need for static tlsPrivateKeyFile and tlsCertFile configuration.
+        
+        Current kubelet configuration shows serverTLSBootstrap: #{server_tls_bootstrap}
+        
+        See: https://kubernetes.io/docs/reference/access-authn-authz/kubelet-tls-bootstrapping/
+      MSG
       
-      EKS kubelet is configured with serverTLSBootstrap enabled, which provides automatic
-      certificate generation and rotation for kubelet serving certificates. This eliminates
-      the need for static tlsPrivateKeyFile and tlsCertFile configuration.
-      
-      Current kubelet configuration shows serverTLSBootstrap: #{kubelet.get_config_value('serverTLSBootstrap')}
-      
-      See: https://kubernetes.io/docs/reference/access-authn-authz/kubelet-tls-bootstrapping/
-    JUSTIFICATION
-      expect(kubelet.get_config_value('serverTLSBootstrap')).to eq(true)
+      expect(server_tls_bootstrap).to eq(true), message
     end
   end
   # --- END CUSTOM CODE ---

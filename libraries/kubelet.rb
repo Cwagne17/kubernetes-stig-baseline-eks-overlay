@@ -36,6 +36,19 @@ class Kubelet < Inspec.resource(1)
     cur
   end
 
+  # Convenience methods for common file paths
+  def config_file
+    @cfg_path
+  end
+
+  def ca_file
+    get_config_value('authentication', 'x509', 'clientCAFile')
+  end
+
+  def kubeconfig
+    @flags['kubeconfig']
+  end
+
   private
 
   def discover_kubelet_process_command_line

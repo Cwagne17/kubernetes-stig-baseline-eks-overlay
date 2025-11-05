@@ -1,0 +1,10 @@
+# Python dependencies for EKS STIG Assessment Entrypoint
+
+# AWS SDK for Python
+boto3>=1.40.66
+
+# Environment variable management
+python-dotenv>=1.2.1
+
+# YAML parsing for kubeconfig generation
+PyYAML>=6.0

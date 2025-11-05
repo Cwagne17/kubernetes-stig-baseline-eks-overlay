@@ -29,12 +29,12 @@ inspec_version: "~> 6.0"
 inputs:
   - name: cluster_name
     type: string
-    required: false
+    required: true
     description: "EKS cluster name to audit (used by cluster-scope controls and AWS/EKS queries)."
 
   - name: region
     type: string
-    required: false
+    required: true
     description: "AWS region of the EKS cluster (e.g., us-east-1). Required for AWS CLI/EKS queries in cluster-scope controls."
 
   - name: run_scope

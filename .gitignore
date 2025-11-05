@@ -36,6 +36,58 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+.pytype/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pyenv
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
 # Used by dotenv library to load environment variables.
 # .env
 
@@ -93,3 +145,4 @@ kitchen.local.ec2.yml
 
 # InSpec inputs (may contain sensitive cluster information)
 inputs.yml
+.env
