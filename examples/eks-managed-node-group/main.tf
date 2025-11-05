@@ -83,7 +83,7 @@ module "eks" {
       tags = local.tags
     },
     windows_worker_node = {
-      ami_type       = "WINDOWS_CORE_x86_64"
+      ami_type       = "WINDOWS_CORE_2022_x86_64"
       instance_types = ["t3.medium"]
 
       min_size     = 1
