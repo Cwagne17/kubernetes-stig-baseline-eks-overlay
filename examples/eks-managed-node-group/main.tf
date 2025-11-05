@@ -66,7 +66,7 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
 
   eks_managed_node_groups = {
-    al2023 = {
+    al2023_worker_node = {
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ["t3.medium"]
@@ -80,12 +80,22 @@ module "eks" {
         AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       }
 
-      tags = merge(
-        local.tags,
-        {
-          Name = "${local.name}-al2023-node"
-        }
-      )
+      tags = local.tags
+    },
+    windows_worker_node = {
+      ami_type       = "WINDOWS_CORE_x86_64"
+      instance_types = ["t3.medium"]
+
+      min_size     = 1
+      max_size     = 1
+      desired_size = 1
+
+      # Enable SSM Session Manager access
+      iam_role_additional_policies = {
+        AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      }
+
+      tags = local.tags
     }
   }
 

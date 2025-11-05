@@ -86,6 +86,5 @@ systemctl daemon-reload && systemctl restart kubelet)
       MSG
     end
   end
-  
   # --- END CUSTOM CODE ---
 end
