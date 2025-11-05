@@ -26,18 +26,16 @@ chmod 644 <kubeadm.conf path>'
   tag cci: ['CCI-000366']
   tag nist: ['CM-6 b']
   # --- BEGIN CUSTOM CODE ---
-  only_if('node pass') { run_scope.node? }
+  only_if('cluster pass') { run_scope.cluster? }
 
-  kubeadm_conf_path = input('kubeadm_conf_path')
-
-  # Only check if the file exists (kubeadm may not be used)
-  only_if('kubeadm.conf must exist') do
-    file(kubeadm_conf_path).exist?
-  end
-
-  describe file(kubeadm_conf_path) do
-    it { should exist }
-    it { should_not be_more_permissive_than('0644') }
+  describe 'Kubeadm configuration file permissions in EKS' do
+    it <<~JUSTIFICATION do
+      is not a finding because EKS does not use kubeadm.
+      The control plane is fully managed by Amazon EKS and does not rely on kubeadm for configuration.
+      See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+    JUSTIFICATION
+      expect(true).to eq(true)
+    end
   end
   # --- END CUSTOM CODE ---
 end

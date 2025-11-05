@@ -26,6 +26,9 @@ Set the value of "--etcd-cafile" to the Certificate Authority for etcd.'
   # --- BEGIN CUSTOM CODE ---
   only_if('cluster pass') { run_scope.cluster? }
 
+  cluster_name = input('cluster_name')
+  eks_cluster = aws_eks_cluster(cluster_name)
+
   describe 'Control-plane etcd must have the SSL Certificate Authority set' do
     it <<~JUSTIFICATION do
       is not a finding because the --etcd-cafile flag
@@ -33,6 +36,13 @@ Set the value of "--etcd-cafile" to the Certificate Authority for etcd.'
       See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
     JUSTIFICATION
       expect(true).to eq true
+    end
+  end
+
+  describe 'EKS cluster secrets encryption' do
+    it 'must be enabled as a compensating control for etcd encryption' do
+      expect(eks_cluster.secrets_encrypted?).to eq(true), 
+        'EKS cluster must have secrets encryption enabled to protect etcd data at rest'
     end
   end
   # --- END CUSTOM CODE ---

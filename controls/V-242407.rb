@@ -38,10 +38,10 @@ The kubelet file should now have the permissions of "644".'
   # --- BEGIN CUSTOM CODE ---
   only_if('node pass') { run_scope.node? }
 
-  kubelet_config_path = input('kubelet_config_path')
+  kl = kubelet
 
   describe 'Kubelet configuration file permissions' do
-    subject { file(kubelet_config_path) }
+    subject { file(kl.config_file) }
 
     it 'must exist' do
       expect(subject).to exist

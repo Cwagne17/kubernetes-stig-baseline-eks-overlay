@@ -33,10 +33,10 @@ The kubelet file should now be owned by root:root.'
   # --- BEGIN CUSTOM CODE ---
   only_if('node pass') { run_scope.node? }
 
-  kubelet_config_path = input('kubelet_config_path')
+  kl = kubelet
 
   describe 'Kubelet configuration file' do
-    subject { file(kubelet_config_path) }
+    subject { file(kl.config_file) }
 
     it 'must exist' do
       expect(subject).to exist

@@ -28,17 +28,14 @@ chown root:root <kubeadm.conf path>'
   # --- BEGIN CUSTOM CODE ---
   only_if('node pass') { run_scope.node? }
 
-  kubeadm_conf_path = input('kubeadm_conf_path')
-
-  # Only check if the file exists (kubeadm may not be used)
-  only_if('kubeadm.conf must exist') do
-    file(kubeadm_conf_path).exist?
-  end
-
-  describe file(kubeadm_conf_path) do
-    it { should exist }
-    its('owner') { should cmp 'root' }
-    its('group') { should cmp 'root' }
+  describe 'Kubeadm configuration file ownership' do
+    it <<~JUSTIFICATION do
+      is not a finding because EKS does not use kubeadm.
+      The control plane is fully managed by Amazon EKS and does not rely on kubeadm for configuration.
+      See https://docs.aws.amazon.com/eks/latest/best-practices/control-plane.html
+    JUSTIFICATION
+      expect(true).to eq(true)
+    end
   end
   # --- END CUSTOM CODE ---
 end

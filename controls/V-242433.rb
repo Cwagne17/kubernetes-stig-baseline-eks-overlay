@@ -26,6 +26,9 @@ Set the value of "--peer-key-file" to the certificate to be used for communicati
   # --- BEGIN CUSTOM CODE ---
   only_if('cluster pass') { run_scope.cluster? }
 
+  cluster_name = input('cluster_name')
+  eks_cluster = aws_eks_cluster(cluster_name)
+
   describe 'Control-plane etcd must have a peer-key-file set for secure communication' do
     it <<~JUSTIFICATION do
       is not a finding because the --peer-key-file flag
@@ -33,6 +36,13 @@ Set the value of "--peer-key-file" to the certificate to be used for communicati
       See https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html#control-plane
     JUSTIFICATION
       expect(true).to eq true
+    end
+  end
+
+  describe 'EKS cluster secrets encryption' do
+    it 'must be enabled as a compensating control for etcd encryption' do
+      expect(eks_cluster.secrets_encrypted?).to eq(true), 
+        'EKS cluster must have secrets encryption enabled to protect etcd data at rest'
     end
   end
   # --- END CUSTOM CODE ---

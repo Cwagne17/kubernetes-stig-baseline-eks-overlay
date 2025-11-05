@@ -45,9 +45,9 @@ chmod 644 <path_to_client_ca_file>'
   # --- BEGIN CUSTOM CODE ---
   only_if('node pass') { run_scope.node? }
 
-  kubelet_ca_file_path = input('kubelet_ca_file_path')
+  kl = kubelet
 
-  describe file(kubelet_ca_file_path) do
+  describe file(kl.ca_file) do
     it { should exist }
     it { should_not be_more_permissive_than('0644') }
   end

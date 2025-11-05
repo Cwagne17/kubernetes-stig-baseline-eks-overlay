@@ -23,11 +23,10 @@ chmod 644 /etc/kubernetes/kubelet.conf'
   # --- BEGIN CUSTOM CODE ---
   only_if('node pass') { run_scope.node? }
 
-
-  kubelet_kubeconfig_path = input('kubelet_kubeconfig_path')
+  kl = kubelet
 
   describe 'Kubelet kubeconfig file permissions' do
-    subject { file(kubelet_kubeconfig_path) }
+    subject { file(kl.kubeconfig) }
 
     it 'must exist' do
       expect(subject).to exist

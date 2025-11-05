@@ -23,9 +23,9 @@ chown root:root /var/lib/kubelet/config.yaml'
   # --- BEGIN CUSTOM CODE ---
   only_if('node pass') { run_scope.node? }
 
-  kubelet_config_path = input('kubelet_config_path')
+  kl = kubelet
 
-  describe file(kubelet_config_path) do
+  describe file(kl.config_file) do
     it { should exist }
     its('owner') { should cmp 'root' }
     its('group') { should cmp 'root' }
