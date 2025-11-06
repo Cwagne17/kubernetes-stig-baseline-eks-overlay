@@ -24,16 +24,25 @@ chmod 644 /etc/kubernetes/kubelet.conf'
   only_if('node pass') { run_scope.node? }
 
   kl = kubelet
+  kubeconfig_file = file(kl.kubeconfig)
 
   describe 'Kubelet kubeconfig file permissions' do
-    subject { file(kl.kubeconfig) }
-
     it 'must exist' do
-      expect(subject).to exist
+      expect(kubeconfig_file).to exist
     end
 
-    it 'must have permissions 0644 or more restrictive' do
-      expect(subject).not_to be_more_permissive_than('0644')
+    if os.windows?
+      it 'must have secure Windows ACLs for kubelet kubeconfig file' do
+        expect(kubeconfig_file.user_permissions).to eq(
+          'NT AUTHORITY\\SYSTEM' => 'FullControl',
+          'BUILTIN\\Administrators' => 'FullControl',
+          'BUILTIN\\Users' => 'ReadAndExecute, Synchronize'
+        )
+      end
+    else
+      it 'must have Unix permissions of 0644 or more restrictive' do
+        expect(kubeconfig_file).not_to be_more_permissive_than('0644')
+      end
     end
   end
 

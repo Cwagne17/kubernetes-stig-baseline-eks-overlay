@@ -41,12 +41,26 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
 
-  name    = local.name
+  name               = local.name
   kubernetes_version = local.kubernetes_version
 
-  create_kms_key = var.enable_encryption
-  # There is a bug in the module where the default is {} but toggle is checking for null
-  encryption_config = !var.enable_encryption ? null : {}
+  # STIG V-242430: Enable encryption at rest for Kubernetes secrets
+  # Kubernetes etcd must have encryption for communication
+  # Compensating control for etcd encryption in managed EKS environment
+  create_kms_key = true
+
+  # STIG V-242461: Kubernetes API Server audit logs must be enabled
+  # STIG V-242462: The Kubernetes API Server must be set to audit log max size
+  # STIG V-242465: The Kubernetes API Server audit log path must be set
+  # Enable all control plane logging types to CloudWatch Logs
+  # Logs include: api, audit, authenticator, controllerManager, scheduler
+  enabled_log_types = [
+    "api",
+    "audit",
+    "authenticator",
+    "controllerManager",
+    "scheduler"
+  ]
 
   # EKS Addons
   addons = {
@@ -84,6 +98,38 @@ module "eks" {
         AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       }
 
+      # STIG-compliant kubelet configuration for Linux
+      # Ref https://awslabs.github.io/amazon-eks-ami/nodeadm/doc/api/
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  # STIG V-242386: Enable PodSecurity feature gate
+                  featureGates:
+                    PodSecurity: true
+                    # STIG V-242403: Disable DynamicKubeletConfig
+                    DynamicKubeletConfig: false
+                  
+                  # STIG V-242402: Set streaming connection idle timeout to 5 minutes or less
+                  streamingConnectionIdleTimeout: 5m
+          EOT
+        }
+      ]
+
+      # STIG V-242393: Worker nodes must not have sshd service running
+      # STIG V-242394: Worker nodes must not have sshd service enabled
+      post_bootstrap_user_data = <<-EOT
+        #!/bin/bash
+        systemctl stop sshd
+        systemctl disable sshd
+      EOT
+
       tags = local.tags
     },
     windows_worker_node = {
@@ -98,6 +144,39 @@ module "eks" {
       iam_role_additional_policies = {
         AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       }
+
+      # STIG-compliant kubelet configuration for Windows
+      # Ref https://awslabs.github.io/amazon-eks-ami/nodeadm/doc/api/
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            ---
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  # STIG V-242386: Enable PodSecurity feature gate
+                  featureGates:
+                    PodSecurity: true
+                    # STIG V-242403: Disable DynamicKubeletConfig
+                    DynamicKubeletConfig: false
+                  
+                  # STIG V-242402: Set streaming connection idle timeout to 5 minutes or less
+                  streamingConnectionIdleTimeout: 5m
+          EOT
+        }
+      ]
+
+      # STIG V-242393: Worker nodes must not have sshd service running (RDP on Windows)
+      # STIG V-242394: Worker nodes must not have sshd service enabled (RDP on Windows)
+      post_bootstrap_user_data = <<-EOT
+        <powershell>
+        Stop-Service -Name TermService -Force
+        Set-Service -Name TermService -StartupType Disabled
+        </powershell>
+      EOT
 
       tags = local.tags
     }

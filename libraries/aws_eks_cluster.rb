@@ -5,6 +5,7 @@ class AwsEksCluster < Inspec.resource(1)
   name 'aws_eks_cluster'
   supports platform: 'aws'
   supports platform: 'unix'
+  supports platform: 'windows'
   desc 'Lookup an EKS cluster by name using aws-sdk-eks'
 
   attr_reader :cluster_name, :cluster

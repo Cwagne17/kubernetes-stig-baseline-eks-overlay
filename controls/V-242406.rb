@@ -34,20 +34,25 @@ The kubelet file should now be owned by root:root.'
   only_if('node pass') { run_scope.node? }
 
   kl = kubelet
+  config_file = file(kl.config_file)
 
-  describe 'Kubelet configuration file' do
-    subject { file(kl.config_file) }
-
+  describe 'Kubelet configuration file ownership' do
     it 'must exist' do
-      expect(subject).to exist
+      expect(config_file).to exist
     end
 
-    it 'must be owned by root' do
-      expect(subject.owner).to eq('root')
-    end
+    if os.windows?
+      it 'must be owned by BUILTIN\\Administrators on Windows' do
+        expect(config_file.owner).to eq('BUILTIN\\Administrators')
+      end
+    else
+      it 'must be owned by root on Unix' do
+        expect(config_file.owner).to eq('root')
+      end
 
-    it 'must have root as group owner' do
-      expect(subject.group).to eq('root')
+      it 'must have root as group owner on Unix' do
+        expect(config_file.group).to eq('root')
+      end
     end
   end
   # --- END CUSTOM CODE ---

@@ -71,9 +71,25 @@ All the manifest files should now have privileges of "644".'
 
   # If manifest files exist, check their permissions
   manifest_files.each do |manifest_file|
-    describe file(manifest_file) do
-      it 'should have permissions 0644 or more restrictive' do
-        expect(subject).not_to be_more_permissive_than('0644')
+    manifest = file(manifest_file)
+    
+    describe "Manifest file #{manifest_file}" do
+      it 'must exist' do
+        expect(manifest).to exist
+      end
+
+      if os.windows?
+        it 'must have secure Windows ACLs' do
+          expect(manifest.user_permissions).to eq(
+            'NT AUTHORITY\\SYSTEM' => 'FullControl',
+            'BUILTIN\\Administrators' => 'FullControl',
+            'BUILTIN\\Users' => 'ReadAndExecute, Synchronize'
+          )
+        end
+      else
+        it 'must have Unix permissions of 0644 or more restrictive' do
+          expect(manifest).not_to be_more_permissive_than('0644')
+        end
       end
     end
   end

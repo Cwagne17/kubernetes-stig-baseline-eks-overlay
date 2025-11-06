@@ -33,11 +33,12 @@ systemctl daemon-reload && systemctl restart kubelet'
   # EKS Context: Amazon EKS-optimized AMIs use --hostname-override by default
   # to set the node name to match the EC2 instance's private DNS name.
   # This is required for proper cluster join and node identification in EKS.
-  
+
+  hostname_override_flag = kubelet.flags['hostname-override']
+
   describe 'Kubelet --hostname-override flag' do
     it 'should not be present' do
-      kubelet_command = processes('kubelet').commands.to_s
-      expect(kubelet_command).not_to match(/--hostname-override/), <<~MSG
+      expect(hostname_override_flag).to be_nil, <<~MSG
         The --hostname-override flag was found on the kubelet process.
         
         Amazon EKS nodes register to the API server using the instance's EC2 private DNS 
@@ -52,7 +53,7 @@ systemctl daemon-reload && systemctl restart kubelet'
         registration events.
         
         See: https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html
-        Current command: #{kubelet_command}
+        Current command: #{kl.cmdline}
       MSG
     end
   end

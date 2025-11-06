@@ -27,9 +27,19 @@ Note: If access to the worker node is through an SSH session, it is important to
   # --- BEGIN CUSTOM CODE ---
   only_if('node pass') { run_scope.node? }
 
-  describe service('sshd') do
-    it 'must not be running' do
-      expect(subject).not_to be_running
+  if inspec.os.windows?
+    # On Windows, check Remote Desktop (TermService) instead of sshd
+    describe service('TermService') do
+      it 'must not be running on Windows nodes' do
+        expect(subject).not_to be_running
+      end
+    end
+  else
+    # On Unix/Linux, check sshd
+    describe service('sshd') do
+      it 'must not be running on Unix nodes' do
+        expect(subject).not_to be_running
+      end
     end
   end
 

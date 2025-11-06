@@ -39,16 +39,25 @@ The kubelet file should now have the permissions of "644".'
   only_if('node pass') { run_scope.node? }
 
   kl = kubelet
+  config_file = file(kl.config_file)
 
   describe 'Kubelet configuration file permissions' do
-    subject { file(kl.config_file) }
-
     it 'must exist' do
-      expect(subject).to exist
+      expect(config_file).to exist
     end
 
-    it 'must have permissions 0644 or more restrictive' do
-      expect(subject).not_to be_more_permissive_than('0644')
+    if os.windows?
+      it 'must have secure Windows ACLs for kubelet configuration file' do
+        expect(config_file.user_permissions).to eq(
+          'NT AUTHORITY\\SYSTEM' => 'FullControl',
+          'BUILTIN\\Administrators' => 'FullControl',
+          'BUILTIN\\Users' => 'ReadAndExecute, Synchronize'
+        )
+      end
+    else
+      it 'must have Unix permissions of 0644 or more restrictive' do
+        expect(config_file).not_to be_more_permissive_than('0644')
+      end
     end
   end
 

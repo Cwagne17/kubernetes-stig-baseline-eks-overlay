@@ -24,10 +24,26 @@ chmod 644 /var/lib/kubelet/config.yaml'
   only_if('node pass') { run_scope.node? }
 
   kl = kubelet
+  config_file = file(kl.config_file)
 
-  describe file(kl.config_file) do
-    it { should exist }
-    it { should_not be_more_permissive_than('0644') }
+  describe 'Kubelet configuration file permissions' do
+    it 'must exist' do
+      expect(config_file).to exist
+    end
+
+    if os.windows?
+      it 'must have secure Windows ACLs for kubelet configuration file' do
+        expect(config_file.user_permissions).to eq(
+          'NT AUTHORITY\\SYSTEM' => 'FullControl',
+          'BUILTIN\\Administrators' => 'FullControl',
+          'BUILTIN\\Users' => 'ReadAndExecute, Synchronize'
+        )
+      end
+    else
+      it 'must have Unix permissions of 0644 or more restrictive' do
+        expect(config_file).not_to be_more_permissive_than('0644')
+      end
+    end
   end
   # --- END CUSTOM CODE ---
 end

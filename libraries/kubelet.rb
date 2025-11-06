@@ -42,28 +42,45 @@ class Kubelet < Inspec.resource(1)
   end
 
   def ca_file
-    get_config_value('authentication', 'x509', 'clientCAFile')
+    path = get_config_value('authentication', 'x509', 'clientCAFile')
+    # normalize slashes on Windows
+    @os.windows? ? normalize_windows_path(path) : path
   end
 
   def kubeconfig
-    @flags['kubeconfig']
+    path = @flags['kubeconfig']
+
+    # normalize slashes on Windows
+    @os.windows? ? normalize_windows_path(path) : path
   end
 
   private
 
   def discover_kubelet_process_command_line
-    procs = inspec.processes('kubelet')
-    cmds  = procs.commands&.reject { |c| c.to_s.empty? } || []
-
-    cmds.map(&:to_s).map(&:strip).reject(&:empty?).first.to_s
+    if @os.windows?
+      # On Windows, use PowerShell to get the full command line with arguments
+      # inspec.processes uses Get-Process which only returns the path, not the arguments
+      cmd = inspec.command('(Get-WmiObject Win32_Process -Filter "name=\'kubelet.exe\'").CommandLine')
+      return '' unless cmd.exit_status == 0
+      cmd.stdout.to_s.strip
+    else
+      procs = inspec.processes('kubelet')
+      cmds  = procs.commands&.reject { |c| c.to_s.empty? } || []
+      cmds.map(&:to_s).map(&:strip).reject(&:empty?).first.to_s
+    end
   end
 
   def parse_command_line_flags(cmd)
     flags = {}
     return flags if cmd.to_s.empty?
+    
+    # Normalize line breaks and extra whitespace that can appear in Windows output
+    normalized_cmd = cmd.to_s.gsub(/\r?\n/, ' ').gsub(/\s+/, ' ').strip
+    
     # Supports: --flag, --flag=value, --flag value
-    cmd.scan(/--([A-Za-z0-9-]+)(?:=(\S+)|\s+(\S+))?/).each do |name, v1, v2|
-      flags[name] = v1 || v2 || 'true'
+    normalized_cmd.scan(/--([A-Za-z0-9-]+)(?:=([^\s"]+|"[^"]*")|\s+([^\s"]+|"[^"]*"))?/).each do |name, v1, v2|
+      value = (v1 || v2 || 'true').to_s.gsub(/^"|"$/, '')
+      flags[name] = value
     end
     flags
   end
@@ -84,6 +101,7 @@ class Kubelet < Inspec.resource(1)
   def get_default_config_file_paths
     if @os.windows?
       [
+        'C:\\ProgramData\\kubernetes\\kubelet-config.json',
         'C:\\etc\\kubernetes\\kubelet\\config.json',
         'C:\\var\\lib\\kubelet\\config.yaml'
       ]

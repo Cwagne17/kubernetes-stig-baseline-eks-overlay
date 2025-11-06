@@ -24,20 +24,25 @@ chown root:root /etc/kubernetes/kubelet.conf'
   only_if('node pass') { run_scope.node? }
 
   kl = kubelet
+  kubeconfig_file = file(kl.kubeconfig)
 
   describe 'Kubelet kubeconfig file ownership' do
-    subject { file(kl.kubeconfig) }
-
     it 'must exist' do
-      expect(subject).to exist
+      expect(kubeconfig_file).to exist
     end
 
-    it 'must be owned by root' do
-      expect(subject.owner).to eq('root')
-    end
+    if os.windows?
+      it 'must be owned by BUILTIN\\Administrators on Windows' do
+        expect(kubeconfig_file.owner).to eq('BUILTIN\\Administrators')
+      end
+    else
+      it 'must be owned by root on Unix' do
+        expect(kubeconfig_file.owner).to eq('root')
+      end
 
-    it 'must have root as group owner' do
-      expect(subject.group).to eq('root')
+      it 'must have root as group owner on Unix' do
+        expect(kubeconfig_file.group).to eq('root')
+      end
     end
   end
   # --- END CUSTOM CODE ---

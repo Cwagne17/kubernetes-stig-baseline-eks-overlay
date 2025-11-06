@@ -46,10 +46,26 @@ chmod 644 <path_to_client_ca_file>'
   only_if('node pass') { run_scope.node? }
 
   kl = kubelet
+  ca_file = file(kl.ca_file)
 
-  describe file(kl.ca_file) do
-    it { should exist }
-    it { should_not be_more_permissive_than('0644') }
+  describe 'Kubelet CA file permissions' do
+    it 'must exist' do
+      expect(ca_file).to exist
+    end
+
+    if os.windows?
+      it 'must have secure Windows ACLs for kubelet CA file' do
+        expect(ca_file.user_permissions).to eq(
+          'NT AUTHORITY\\SYSTEM' => 'FullControl',
+          'BUILTIN\\Administrators' => 'FullControl',
+          'BUILTIN\\Users' => 'ReadAndExecute, Synchronize'
+        )
+      end
+    else
+      it 'must have Unix permissions of 0644 or more restrictive' do
+        expect(ca_file).not_to be_more_permissive_than('0644')
+      end
+    end
   end
   # --- END CUSTOM CODE ---
 end
