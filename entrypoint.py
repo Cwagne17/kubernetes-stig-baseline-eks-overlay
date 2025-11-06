@@ -345,13 +345,9 @@ def create_ckl_metadata(path: Path, node_metadata: NodeMetadata) -> None:
         "hostip": node_metadata.hostip,
         "hostfqdn": node_metadata.hostfqdn,
         "hostmac": node_metadata.hostmac,
-        "role": "Member Server",
         "assettype": "Computing",
-        "techarea": "Container Platform",
-        "stigguid": "CNTR-K8-000160",
-        "webordatabase": "false",
+        "webordatabase": "n",
         "vulidmapping": "gid",
-        "webdbinstance": node_metadata.instance_id,
     }
 
     # Create metadata JSON file

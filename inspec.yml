@@ -1,5 +1,5 @@
 name: kubernetes-stig-baseline-eks-overlay
-title: Kubernetes Security Technical Implementation Guide
+title: AWS EKS Kubernetes STIG Overlay :: Version 2, Release 4
 maintainer: Christopher Wagner <github.com/cwagne17>
 license: Apache-2.0
 summary: InSpec profile aligned to STIG Guidance for Kubernetes Security
