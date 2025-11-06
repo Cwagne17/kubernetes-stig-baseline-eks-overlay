@@ -7,10 +7,10 @@ LABEL maintainer="Christopher Wagner <github.com/Cwagne17>" \
 # Install all system dependencies, tools, and clean up in single layer
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
         python3 \
         python3-pip \
-        curl \
-        ca-certificates \
     && curl -L https://omnitruck.cinc.sh/install.sh | bash -s -- -P cinc-auditor -v 6 \
     && SAF_VERSION=1.5.1 \
     && ARCH=$(dpkg --print-architecture) \

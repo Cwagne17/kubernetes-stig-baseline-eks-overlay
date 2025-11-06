@@ -1,4 +1,4 @@
-name: kubernetes-stig-baseline
+name: kubernetes-stig-baseline-eks-overlay
 title: Kubernetes Security Technical Implementation Guide
 maintainer: Christopher Wagner <github.com/cwagne17>
 license: Apache-2.0

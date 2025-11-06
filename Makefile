@@ -48,8 +48,8 @@ stop: ## Stop Heimdall Lite
 
 docker-build: ## Build the Docker image
 	@echo "Building Docker image..."
-	docker build -t kubernetes-stig-baseline-eks:latest .
-	@echo "✅ Image built: kubernetes-stig-baseline-eks:latest"
+	docker build -t kubernetes-stig-baseline-eks-overlay:latest .
+	@echo "✅ Image built: kubernetes-stig-baseline-eks-overlay:latest"
 
 docker-run: ## Run the Docker image (use TARGET=<target> for custom target)
 	@echo "Running InSpec profile in Docker..."
@@ -57,7 +57,7 @@ docker-run: ## Run the Docker image (use TARGET=<target> for custom target)
 	docker run --rm \
 		$(if $(TARGET),-e TARGET=$(TARGET)) \
 		-v $(PWD)/output:/opt/output \
-		kubernetes-stig-baseline-eks:latest
+		kubernetes-stig-baseline-eks-overlay:latest
 	@echo "✅ Results saved to output/results.json"
 
 docker-run-ssm: ## Run with AWS SSM (use TARGET=awsssm://instance-id)
@@ -69,5 +69,5 @@ docker-run-ssm: ## Run with AWS SSM (use TARGET=awsssm://instance-id)
 		-e AWS_PROFILE=$(AWS_PROFILE) \
 		-v $(HOME)/.aws:/root/.aws:ro \
 		-v $(PWD)/output:/opt/output \
-		kubernetes-stig-baseline-eks:latest
+		kubernetes-stig-baseline-eks-overlay:latest
 	@echo "✅ Results saved to output/results.json"

@@ -637,10 +637,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # Clean up the output directory by removing JSON files
-    # Commented out to help with debugging
-    # logger.info("Cleaning up temporary HDF JSON files...")
-    # for json_file in config.out_dir.glob("*.json"):
-    #     os.remove(json_file)
-    #     logger.info(f"Removed: {json_file}")
+    logger.info("Cleaning up temporary HDF JSON files...")
+    for json_file in config.out_dir.glob("*.json"):
+        os.remove(json_file)
+        logger.info(f"Removed: {json_file}")
 
     sys.exit(rc)

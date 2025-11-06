@@ -1,6 +1,7 @@
 # Git
 .git
 .gitignore
+.github/
 
 # Documentation
 *.md
@@ -10,6 +11,8 @@ output/
 *.json
 *.html
 *.xml
+*.log
+sources/
 
 # Terraform/OpenTofu
 examples/
@@ -41,3 +44,11 @@ Dockerfile
 # Misc
 .DS_Store
 Thumbs.db
+
+# Inspec
+inputs.yml
+inspec.lock
+
+# Python
+__pycache__/
+.venv/
