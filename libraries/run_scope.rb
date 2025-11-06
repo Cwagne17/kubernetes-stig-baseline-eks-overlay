@@ -31,7 +31,7 @@ class StigRunScope < Inspec.resource(1)
       # Try to find the input in the registry for this profile
       input_obj = Inspec::InputRegistry.find_or_register_input(
         'run_scope',
-        'kubernetes-stig-baseline'
+        'kubernetes-stig-baseline-eks-overlay'
       )
       input_obj.value.to_s
     end

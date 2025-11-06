@@ -194,7 +194,7 @@ def get_eks_compute_nodes() -> List[ComputeNode]:
 
                 compute_nodes.append(node)
                 logger.info(
-                    f"  Node: {instance_id} ({instance['InstanceType']}, "
+                    f"Node: {instance_id} ({instance['InstanceType']}, "
                     f"nodegroup: {nodegroup_name}, hostname: {hostname})"
                 )
 
@@ -232,79 +232,35 @@ def validate_required_tools() -> None:
 
 def generate_kubeconfig() -> Path:
     """
-    Generate a kubeconfig file for the EKS cluster using boto3.
+    Generate a kubeconfig file for the EKS cluster using AWS CLI.
     This is required for kubectl checks to work properly.
 
     Returns:
         Path to the kubeconfig file
     """
-    kubeconfig_path = Path.home() / ".kube" / "config"
-    kubeconfig_path.parent.mkdir(parents=True, exist_ok=True)
-
     logger.info(f"Generating kubeconfig for cluster: {config.eks_cluster_name}")
 
     try:
-        eks_client = boto3.client("eks", region_name=config.aws_region)
+        # Use AWS CLI to update kubeconfig
+        cmd = [
+            "aws",
+            "eks",
+            "update-kubeconfig",
+            "--name",
+            config.eks_cluster_name,
+            "--region",
+            config.aws_region,
+        ]
 
-        # Get cluster details
-        response = eks_client.describe_cluster(name=config.eks_cluster_name)
-        cluster = response["cluster"]
-
-        # Build kubeconfig structure
-        kubeconfig = {
-            "apiVersion": "v1",
-            "kind": "Config",
-            "clusters": [
-                {
-                    "name": cluster["arn"],
-                    "cluster": {
-                        "server": cluster["endpoint"],
-                        "certificate-authority-data": cluster["certificateAuthority"][
-                            "data"
-                        ],
-                    },
-                }
-            ],
-            "contexts": [
-                {
-                    "name": cluster["arn"],
-                    "context": {
-                        "cluster": cluster["arn"],
-                        "user": cluster["arn"],
-                    },
-                }
-            ],
-            "current-context": cluster["arn"],
-            "users": [
-                {
-                    "name": cluster["arn"],
-                    "user": {
-                        "exec": {
-                            "apiVersion": "client.authentication.k8s.io/v1beta1",
-                            "command": "aws",
-                            "args": [
-                                "eks",
-                                "get-token",
-                                "--cluster-name",
-                                config.eks_cluster_name,
-                                "--region",
-                                config.aws_region,
-                            ],
-                        }
-                    },
-                }
-            ],
-        }
-
-        # Write kubeconfig file
-        with open(kubeconfig_path, "w") as f:
-            yaml.dump(kubeconfig, f, default_flow_style=False)
-
-        logger.info(f"  ✓ Kubeconfig generated at: {kubeconfig_path}")
-        return kubeconfig_path
-
+        subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"Failed to generate kubeconfig: {e.stderr}") from e
     except Exception as e:
-        logger.error(f"Failed to generate kubeconfig: {e}")
         raise RuntimeError(f"Failed to generate kubeconfig: {e}") from e
 
 
@@ -354,7 +310,7 @@ def filter_not_reviewed_controls(hdf_path: Path) -> None:
 
             if filtered_count > 0:
                 logger.info(
-                    f"  Filtered out {filtered_count} guard-skipped controls from {hdf_path.name}"
+                    f"Filtered out {filtered_count} guard-skipped controls from {hdf_path.name}"
                 )
 
         # Write back the filtered data
@@ -402,7 +358,7 @@ def create_ckl_metadata(path: Path, node_metadata: NodeMetadata) -> None:
     with open(path, "w") as f:
         json.dump(ckl_metadata, f, indent=4)
 
-    logger.debug(f"Created CKL metadata file: {path}")
+    logger.info(f"Created CKL metadata file: {path}")
 
 
 # ============================================================================
@@ -410,8 +366,8 @@ def create_ckl_metadata(path: Path, node_metadata: NodeMetadata) -> None:
 # ============================================================================
 
 
-async def run_cmd(argv: List[str], label: str, timeout: int = 600) -> int:
-    """Run a command asynchronously with timeout."""
+async def run_cmd(argv: List[str], label: str) -> int:
+    """Run a command asynchronously. Use asyncio.timeout context manager for timeout control."""
     logger.info(f"{label} Starting command {argv[0]}")
 
     popen_kwargs = {}
@@ -426,13 +382,9 @@ async def run_cmd(argv: List[str], label: str, timeout: int = 600) -> int:
         stderr=asyncio.subprocess.STDOUT,
         **popen_kwargs,
     )
-    try:
-        rc = await asyncio.wait_for(proc.wait(), timeout=timeout)
-        logger.info(f"{label} Command finished with return code: {rc}")
-    except asyncio.TimeoutError:
-        logger.error(f"{label} Command timed out after {timeout} seconds")
-        proc.kill()
-        rc = 124
+
+    rc = await proc.wait()
+    logger.info(f"{label} Command finished with return code: {rc}")
     return rc
 
 
@@ -441,7 +393,6 @@ async def run_assessment(
     scope: str,
     target: str,
     hdf_path: Path,
-    kubeconfig_path: Optional[Path] = None,
 ) -> Tuple[str, int, int]:
     """Run a single assessment (cluster or node) and convert to CKL."""
     # Validate tools are installed and get full paths
@@ -462,16 +413,17 @@ async def run_assessment(
         f"region={config.aws_region}",
     ]
 
-    # Add kubeconfig input for cluster assessments
-    if scope == "cluster" and kubeconfig_path:
-        cinc_args.extend(["--input", f"kubeconfig={kubeconfig_path}"])
-
     # Add target for node assessments
     if scope == "node":
         cinc_args.extend(["--target", f"awsssm://{target}"])
 
-    # Run assessment with 5 minute timeout
-    cinc_rc = await run_cmd(cinc_args, f"[{label}][cinc-auditor]", timeout=300)
+    # Run assessment with 2.5 minute timeout
+    try:
+        async with asyncio.timeout(150):
+            cinc_rc = await run_cmd(cinc_args, f"[{label}][cinc-auditor]")
+    except TimeoutError:
+        logger.error(f"[{label}][cinc-auditor] Command timed out after 150 seconds")
+        cinc_rc = 124
 
     # Filter out "Not Reviewed" controls from the JSON output
     filter_not_reviewed_controls(hdf_path)
@@ -498,12 +450,18 @@ async def run_assessment(
     # if metadata_path and metadata_path.exists():
     #     saf_args.extend(["-M", str(metadata_path)])
 
-    saf_rc = await run_cmd(saf_args, f"[{label}][saf]", timeout=60)
+    # Run SAF conversion with 1 minute timeout
+    try:
+        async with asyncio.timeout(60):
+            saf_rc = await run_cmd(saf_args, f"[{label}][saf]")
+    except TimeoutError:
+        logger.error(f"[{label}][saf] Command timed out after 60 seconds")
+        saf_rc = 124
 
     # Clean up metadata file after conversion
     # if metadata_path and metadata_path.exists():
     #     os.remove(metadata_path)
-    #     logger.debug(f"  Removed temporary metadata file: {metadata_path}")
+    #     logger.info(f"  Removed temporary metadata file: {metadata_path}")
 
     return (label, cinc_rc, saf_rc)
 
@@ -539,12 +497,7 @@ def eks_stig_assessment() -> int:
     logger.info(f"Output Directory: {config.out_dir.absolute()}")
 
     # Generate kubeconfig for cluster assessments
-    try:
-        kubeconfig_path = generate_kubeconfig()
-    except Exception as e:
-        logger.error(f"Failed to generate kubeconfig: {e}")
-        logger.warning("Cluster kubectl checks may fail without kubeconfig")
-        kubeconfig_path = None
+    generate_kubeconfig()
 
     # Discover compute nodes
     try:
@@ -565,7 +518,6 @@ def eks_stig_assessment() -> int:
             "target": config.eks_cluster_name,
             "hdf_path": config.out_dir
             / f"{config.eks_cluster_name}_cluster_{config.timestamp}.json",
-            "kubeconfig_path": kubeconfig_path,
         }
     )
 

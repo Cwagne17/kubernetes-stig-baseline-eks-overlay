@@ -63,6 +63,10 @@ module "eks" {
   vpc_id     = data.aws_vpc.default.id
   subnet_ids = data.aws_subnets.default.ids
 
+  # Enable both public and private endpoint access
+  endpoint_public_access  = true
+  endpoint_private_access = true
+
   enable_cluster_creator_admin_permissions = true
 
   eks_managed_node_groups = {
